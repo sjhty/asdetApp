@@ -14,7 +14,7 @@ module.exports = {
     };
     if (result) {
         conObj.success = true;
-        conObj.data.push(result);
+        conObj.data = result;
     } else {
         conObj.success = false;
         conObj.message = "未查到相关数据"
