@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
-const API = require('../../axios/api')
+import Api from '../../axios/api'
 
 class Products extends Component {
-    // constructor(props) {
-    //     this.getAll();
-    // };
+    constructor(props){
+        super(props);
+        this.state = {
+            result: ''
+        }
+    }
 
     async getAll() {
-        let response = await API.getCountAndProducts()
+        let response = await Api.getCountAndProducts();
 
         console.log(response)
 
-        let productList = response.data.map((item) => {
-            //item.hasFollow = false
-            return item
-        });
         this.setState({
-            productList
+            result: response
         })
     }
 
     render () {
         return (
             <div>
-                {this.state.productList}
+                当前数据：{this.state.result}
+                <button onClick={() => this.getAll()}>增加</button>
             </div>
         )
     }

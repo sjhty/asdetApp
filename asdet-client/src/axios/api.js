@@ -1,10 +1,11 @@
-import react from 'react'
-import instance from '../axios/instance';
+import {get} from './config'
 
-const getCountAndProducts = (data) => {
-    return instance.get('/products',data);
+const getCountAndProducts = (params) => {
+    return get('/products',params);
 }
 
-export default {
+const api = {
     getCountAndProducts
 }
+
+export default api
