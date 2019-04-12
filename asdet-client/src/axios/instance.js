@@ -2,8 +2,6 @@ import axios from 'axios';
 import baseUrl from './config.js'
 import { notification } from 'antd';
 
-// import { Toast } from 'antd-mobile';
-
 const instance = axios.create({
     //当创建实例的时候配置默认配置
     xsrfCookieName: 'xsrf-token',

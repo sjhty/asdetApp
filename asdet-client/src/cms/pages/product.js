@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import API from '../../axios/api'
+const API = require('../../axios/api')
 
 class Products extends Component {
+    // constructor(props) {
+    //     this.getAll();
+    // };
 
     async getAll() {
         let response = await API.getCountAndProducts()
+
+        console.log(response)
 
         let productList = response.data.map((item) => {
             //item.hasFollow = false
@@ -23,3 +28,5 @@ class Products extends Component {
         )
     }
 }
+
+export default Products;
