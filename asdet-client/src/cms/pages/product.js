@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Api from '../../axios/api'
+import Api from '../../axios/api/productsApi'
 
 class Products extends Component {
     constructor(props){
@@ -15,15 +15,28 @@ class Products extends Component {
         console.log(response)
 
         this.setState({
-            result: response
+            result: response.data.count
         })
+    }
+
+    async getProductById() {
+        let params = {
+            id: 1
+        }
+        let response = await Api.getProductsById(params);
+
+        console.log(response)
+
+        // this.setState({
+        //     result: response.data.count
+        // })
     }
 
     render () {
         return (
             <div>
                 当前数据：{this.state.result}
-                <button onClick={() => this.getAll()}>增加</button>
+                <button onClick={() => this.getProductById()}>增加</button>
             </div>
         )
     }

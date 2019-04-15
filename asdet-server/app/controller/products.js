@@ -1,27 +1,36 @@
 const Controller = require('egg').Controller;
 
 class ProductController extends Controller {
-    async index() {
-        const ctx = this.ctx;
+    //增加商品
+    async addProduct() {
+        const { ctx } = this;
 
-        const query = {
-            offset: ctx.helper.parseInt(ctx.query.offset),
-            limit: ctx.helper.parseInt(ctx.query.limit)
+        const { name, category_id, attribute, imgUrl, stock } = ctx.request.body;
+        let newProduct = {
+            name: name,
+            category_id: category_id,
+            attribute: attribute,
+            imgUrl: imgUrl,
+            stock: stock
         }
 
-        ctx.body = await ctx.service.products.list(query);
+        await ctx.service.addProduct(newProduct);
+
+        //ctx.returnBody(200, "发帖成功");
     }
 
-    async show() {
-        const ctx = this.ctx;
-        const result = await ctx.service.products.find(ctx.helper.parseInt(ctx.params.id));
-        ctx.body = result;
+    //查询所有商品列表
+    async findAllList() {
+        const { ctx } = this;
+        
+        await ctx.service.findList();
     }
 
-    async create() {
-        const ctx = this.ctx;
-        const result = await ctx.service.products.create(ctx.request.body);
-        ctx.body = result;
+    //通过ID查询商品
+    async findById() {
+        const { ctx } = this;
+        
+        await ctx.service.findList(ctx.params.id);
     }
 }
 
