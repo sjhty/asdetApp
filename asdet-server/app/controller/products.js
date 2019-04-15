@@ -14,7 +14,7 @@ class ProductController extends Controller {
             stock: stock
         }
 
-        await ctx.service.addProduct(newProduct);
+        await ctx.service.products.addProduct(newProduct);
 
         //ctx.returnBody(200, "发帖成功");
     }
@@ -22,15 +22,15 @@ class ProductController extends Controller {
     //查询所有商品列表
     async findAllList() {
         const { ctx } = this;
-        
-        await ctx.service.findList();
+
+        await ctx.service.products.findList("");
     }
 
     //通过ID查询商品
     async findById() {
         const { ctx } = this;
-        
-        await ctx.service.findList(ctx.params.id);
+
+        await ctx.service.products.findList(ctx.params.id);
     }
 }
 
