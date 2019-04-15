@@ -1,7 +1,7 @@
-import {get} from './config'
+import {get } from './config'
 
 const getCountAndProducts = (params) => {
-    return get('/products',params);
+    return get('/asdet/api/products', params);
 }
 
 const api = {

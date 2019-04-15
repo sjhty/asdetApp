@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:7001/asdet/api/';
+axios.defaults.baseURL = 'http://localhost:7001';
 
 // const instance = axios.create({
 //     //当创建实例的时候配置默认配置
@@ -19,15 +19,15 @@ axios.defaults.baseURL = 'http://localhost:7001/asdet/api/';
 
 
 const request = function(url, params, method) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
         axios[method](url, params)
-        .then( response => {
-            resolve(response.data)
-        },err => {
-            reject(err)
-        }).catch( err => {
-            reject(err)
-        })
+            .then(response => {
+                resolve(response.data)
+            }, err => {
+                reject(err)
+            }).catch(err => {
+                reject(err)
+            })
     })
 }
 
@@ -39,4 +39,4 @@ const post = (url, params) => {
     return request(url, params, 'post');
 }
 
-export {get, post};
+export {get, post };
