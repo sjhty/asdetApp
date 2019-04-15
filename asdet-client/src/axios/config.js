@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:7001/asdet/api/';
+axios.defaults.baseURL = 'http://127.0.0.1:7001/asdet/api';
+//axios.defaults.responseType = 'json';
+//axios.defaults.headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'}
 
 // const instance = axios.create({
 //     //当创建实例的时候配置默认配置

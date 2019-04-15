@@ -81,12 +81,7 @@ module.exports = function(proxy, allowedHost) {
       disableDotRule: true,
     },
     public: allowedHost,
-    proxy: {
-      '/asdet/api/**': {
-        target: 'http://localhost:7001',
-        changeOrigin: true
-      }
-    },
+    proxy: {},
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons

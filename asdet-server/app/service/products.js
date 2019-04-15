@@ -1,34 +1,36 @@
 const Service = require('egg').Service;
 class ProductService extends Service {
-    async list({ offset = 0, limit = 10}) {
-        const result = await this.ctx.model.Products.findAndCountAll({
-            offset,
-            limit
-        });
-        
-        const data = this.ctx.helper.formatData(result);
+    /**
+     * 添加商品
+     * @param {*} productPramas 
+     */
+    async addProduct(productPramas) {
+        let { ctx } = this;
 
-        return data;
+        let result = await ctx.model.Products.create(productPramas);
+        return ctx.helper.formatData(result);
     }
 
-    async find(id) {
-        const result = await this.ctx.model.Products.findById(id,{
+    /**
+     * 获取所有商品和商品分类下的价格
+     * @param {*} id id=undefined 查询所有
+     */
+    async findList(id) {
+        let { ctx } = this;
+
+        let categoryObj = {
             include: [{
                 model: this.ctx.model.Category,
                 as: 'category',
                 attributes: ['name','price','minister_price','director_price','president_price']
             }]
-        });
+        }
 
-        const data = this.ctx.helper.formatData(result);
-
-        return data;
-    }
-
-    async create(pro) {
-        const result = await this.ctx.model.Products.create(pro);
-        const data = this.ctx.header.formatData(result);
-        return data;
+        if (typeof(id) == "undefined") {
+            return ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj));
+        } else {
+            return ctx.helper.formatData(await ctx.model.Products.findById(id,categoryObj));
+        }
     }
 }
 
