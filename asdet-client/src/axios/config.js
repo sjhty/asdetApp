@@ -21,15 +21,15 @@ axios.defaults.baseURL = 'http://127.0.0.1:7001/asdet/api';
 
 
 const request = function(url, params, method) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
         axios[method](url, params)
-        .then( response => {
-            resolve(response.data)
-        },err => {
-            reject(err)
-        }).catch( err => {
-            reject(err)
-        })
+            .then(response => {
+                resolve(response.data)
+            }, err => {
+                reject(err)
+            }).catch(err => {
+                reject(err)
+            })
     })
 }
 
@@ -41,4 +41,4 @@ const post = (url, params) => {
     return request(url, params, 'post');
 }
 
-export {get, post};
+export {get, post };
