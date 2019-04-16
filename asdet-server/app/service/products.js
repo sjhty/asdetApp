@@ -22,14 +22,16 @@ class ProductService extends Service {
             include: [{
                 model: this.ctx.model.Category,
                 as: 'category',
-                attributes: ['name','price','minister_price','director_price','president_price']
+                attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price']
             }]
         }
 
-        if (typeof(id) == "undefined") {
+        console.log("id============" + ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj)))
+
+        if (id == "") {
             return ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj));
         } else {
-            return ctx.helper.formatData(await ctx.model.Products.findById(id,categoryObj));
+            return ctx.helper.formatData(await ctx.model.Products.findById(id, categoryObj));
         }
     }
 }
