@@ -23,14 +23,14 @@ class ProductController extends Controller {
     async findAllList() {
         const { ctx } = this;
 
-        await ctx.service.products.findList("");
+        ctx.body = await ctx.service.products.findList();
     }
 
     //通过ID查询商品
     async findById() {
         const { ctx } = this;
 
-        await ctx.service.products.findList(ctx.params.id);
+        ctx.body = await ctx.service.products.findList(ctx.params.id);
     }
 }
 

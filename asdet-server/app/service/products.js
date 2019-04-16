@@ -26,9 +26,7 @@ class ProductService extends Service {
             }]
         }
 
-        console.log("id============" + ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj)))
-
-        if (id == "") {
+        if (typeof(id) == "undefined") {
             return ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj));
         } else {
             return ctx.helper.formatData(await ctx.model.Products.findById(id, categoryObj));
