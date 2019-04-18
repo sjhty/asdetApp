@@ -16,7 +16,7 @@ module.exports = {
      id: {type: INTEGER, primaryKey: true, autoIncrement: true},
      name: STRING(30),              //商品名称
      category_id: INTEGER,          //商品分类ID
-     attribute: INTEGER,            //商品属性
+     attribute: STRING(300),            //商品属性
      imgUrl: STRING(200),           //商品图片地址
      stock: INTEGER,                    //商品库存
      created_at: DATE

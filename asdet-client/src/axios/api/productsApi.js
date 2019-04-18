@@ -1,16 +1,24 @@
-import {get} from '../config'
+import { get, post} from '../config'
 
 const getCountAndProducts = (params) => {
-    return get('/products',params);
+    return get('/products/search/',params);
 }
 
 const getProductsById = (params) => {
-    return get('/products/search/',params);
+    console.log(params);
+    let url = "/products/"+params.id
+    return get(url,params);
+}
+
+const addProduct = (params) => {
+    console.log(params);
+    return post('/products/add',params);
 }
 
 const ProductsApi = {
     getCountAndProducts,
-    getProductsById
+    getProductsById,
+    addProduct
 }
 
 export default ProductsApi

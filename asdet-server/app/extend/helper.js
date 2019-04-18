@@ -12,6 +12,7 @@ module.exports = {
         success: true,
         data:[]
     };
+
     if (result) {
         conObj.success = true;
         conObj.data = result;
