@@ -46,12 +46,33 @@ class Products extends Component {
         //console.log(response)
     }
 
+    async updateProduct() {
+        let params = {
+            id: 30,
+            name: "测试1测试1测试1测试1测试1",
+            category_id: 2,
+            attribute: "ceshi 2",
+            imgUrl: "imgUrl",
+            stock: 5
+        }
+
+        await Api.updateProduct(params)
+    }
+
+    async deleteProduct() {
+        let params = {
+            id: 30
+        }
+
+        await Api.deleteProduct(params)
+    }
+
     render () {
         return (
             <div>
                 <input type="text" />
                 当前数据：{this.state.result}
-                <button onClick={() => this.addProduct()}>增加</button>
+                <button onClick={() => this.deleteProduct()}>增加</button>
             </div>
         )
     }

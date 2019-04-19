@@ -5,9 +5,9 @@ class ProductService extends Service {
      * @param {*} productPramas 
      */
     async addProduct(productPramas) {
-        let { ctx } = this;
+        const { ctx } = this;
 
-        let result = await ctx.model.Products.create(productPramas);
+        const result = await ctx.model.Products.create(productPramas);
         return ctx.helper.formatData(result);
     }
 
@@ -16,9 +16,9 @@ class ProductService extends Service {
      * @param {*} id id=undefined 查询所有
      */
     async findList(query) {
-        let { ctx } = this;
+        const { ctx } = this;
 
-        let categoryObj = {
+        const categoryObj = {
             include: [{
                 model: this.ctx.model.Category,
                 as: 'category',
@@ -26,17 +26,12 @@ class ProductService extends Service {
             }]
         }
 
-        console.log("【"+ query +"】")
-
-        let result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj,{
+        const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj,{
             where: query,
             order: [['created_at', 'DESC']]
         }))
 
         return result;
-        // } else {
-        //     return ctx.helper.formatData(await ctx.model.Products.findById(id, categoryObj));
-        // }
     }
 
     /**
@@ -44,9 +39,9 @@ class ProductService extends Service {
      * @param {*} id 
      */
     async findById(id) {
-        let { ctx } = this;
+        const { ctx } = this;
 
-        let categoryObj = {
+        const categoryObj = {
             include: [{
                 model: this.ctx.model.Category,
                 as: 'category',
@@ -62,12 +57,37 @@ class ProductService extends Service {
      * @param {*} query 
      * @param {*} product 
      */
-    async updateProduct(query,product) {
-        let { ctx } = this;
+    async updateProduct(id,info) {
+        const { ctx } = this;
+        const product = await ctx.model.Products.findById(id);
+        let result='';
 
-        let result = ctx.helper.formatData(await ctx.model.Products.update(product,{
-            where: query
-        }));
+        console.log(info)
+
+        if (!product) {
+            ctx.status = 404;
+        } else {
+            result = ctx.helper.formatData(await product.update(info));
+        }
+
+        return result;
+    }
+
+
+    /**
+     * 删除商品
+     * @param {*} id 
+     */
+    async deleteProduct(id) {
+        const { ctx } = this;
+        const product = await ctx.model.Products.findById(id);
+        let result='';
+
+        if (!product) {
+            ctx.status = 404;
+        } else {
+            result = ctx.helper.formatData(await product.destroy());
+        }
 
         return result;
     }

@@ -15,10 +15,21 @@ const addProduct = (params) => {
     return post('/products/add',params);
 }
 
+const updateProduct = (params) => {
+    return post('/products/update',params);
+}
+
+const deleteProduct = (params) => {
+    let url = "/products/destory/"+params.id
+    return post(url,params);
+}
+
 const ProductsApi = {
     getCountAndProducts,
     getProductsById,
-    addProduct
+    addProduct,
+    updateProduct,
+    deleteProduct
 }
 
 export default ProductsApi

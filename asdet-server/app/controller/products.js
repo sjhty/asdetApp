@@ -14,7 +14,7 @@ class ProductController extends Controller {
             stock: stock
         }
 
-        await ctx.service.products.addProduct(newProduct);
+        ctx.body = await ctx.service.products.addProduct(newProduct);
 
         //ctx.returnBody(200, "发帖成功");
     }
@@ -31,6 +31,28 @@ class ProductController extends Controller {
         const { ctx } = this;
 
         ctx.body = await ctx.service.products.findById(ctx.params.id);
+    }
+
+    /**
+     * 修改商品
+     */
+    async updateProduct() {
+        const { ctx } = this;
+
+        const id = ctx.request.body.id;
+
+        ctx.body = await ctx.service.products.updateProduct(id,ctx.request.body);
+
+    }
+
+    /**
+     * 删除商品
+     */
+    async destroyProduct() {
+        const { ctx } = this;
+
+        ctx.body = await ctx.service.products.deleteProduct(ctx.params.id);
+
     }
 }
 

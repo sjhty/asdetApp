@@ -10,4 +10,6 @@ module.exports = app => {
     router.get('/asdet/api/products/search', controller.products.findAllList);
     router.get('/asdet/api/products/search/:id', controller.products.findById);
     router.post('/asdet/api/products/add', controller.products.addProduct);
+    router.post('/asdet/api/products/update', controller.products.updateProduct);
+    router.post('/asdet/api/products/destory/:id', controller.products.destroyProduct);
 };
