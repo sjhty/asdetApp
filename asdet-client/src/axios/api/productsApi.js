@@ -1,17 +1,15 @@
 import { get, post} from '../config'
 
 const getCountAndProducts = (params) => {
-    return get('/products/search/',params);
+    return post('/products/search',params);
 }
 
 const getProductsById = (params) => {
-    console.log(params);
     let url = "/products/"+params.id
-    return get(url,params);
+    return post(url,params);
 }
 
 const addProduct = (params) => {
-    console.log(params);
     return post('/products/add',params);
 }
 

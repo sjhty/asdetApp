@@ -10,13 +10,18 @@ class Products extends Component {
     }
 
     async getAll() {
-        let response = await Api.getCountAndProducts();
+        let params = {
+            name: '',
+            //attribute: '0'
+        }
+
+        let response = await Api.getCountAndProducts(params);
 
         console.log(response)
 
-        this.setState({
-            result: response.data.count
-        })
+        // this.setState({
+        //     result: response.data.count
+        // })
     }
 
     async getProductById() {
@@ -72,7 +77,7 @@ class Products extends Component {
             <div>
                 <input type="text" />
                 当前数据：{this.state.result}
-                <button onClick={() => this.deleteProduct()}>增加</button>
+                <button onClick={() => this.getAll()}>增加</button>
             </div>
         )
     }

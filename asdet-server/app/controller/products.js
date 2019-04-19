@@ -15,14 +15,12 @@ class ProductController extends Controller {
         }
 
         ctx.body = await ctx.service.products.addProduct(newProduct);
-
-        //ctx.returnBody(200, "发帖成功");
     }
 
     //查询所有商品列表
     async findAllList() {
         const { ctx } = this;
-
+        console.log(ctx.request.body)
         ctx.body = await ctx.service.products.findList(ctx.request.body);
     }
 

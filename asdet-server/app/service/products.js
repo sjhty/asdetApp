@@ -16,20 +16,24 @@ class ProductService extends Service {
      * @param {*} id id=undefined 查询所有
      */
     async findList(query) {
-        const { ctx } = this;
+        const { ctx, app } = this;
+        const Op = app.Sequelize.Op;
 
+        //console.log(query)
         const categoryObj = {
             include: [{
                 model: this.ctx.model.Category,
                 as: 'category',
-                attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price']
+                attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price'],
+                where: {
+                    '$products.name$': {
+                        [Op.like]:'%'+query.name+'%'
+                    }
+                }
             }]
         }
 
-        const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj,{
-            where: query,
-            order: [['created_at', 'DESC']]
-        }))
+        const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj))
 
         return result;
     }

@@ -45,4 +45,4 @@ const post = (url, params) => {
     return request(url, params, 'post');
 }
 
-export {get, post };
+export { get, post };
