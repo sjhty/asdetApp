@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Api from '../../axios/api/productsApi'
+import Api from '../../../axios/api/productsApi'
 
 class Products extends Component {
     constructor(props){
@@ -75,7 +75,7 @@ class Products extends Component {
     render () {
         return (
             <div>
-                <input type="text" />
+                当前页面是商品分类页
                 当前数据：{this.state.result}
                 <button onClick={() => this.getAll()}>增加</button>
             </div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, Menu, Icon } from 'antd'
 import '../sider/index.less'
+
+const SubMenu = Menu.SubMenu
 
 class Sider extends Component {
     render () {
@@ -13,7 +15,15 @@ class Sider extends Component {
                     </Col> */}
                 </Row>
                 <Row>
-                    
+                    <Col>
+                        <Menu theme="dark">
+                            <Menu.Item><span><Icon type="home"/><span>首页</span></span></Menu.Item>
+                            <SubMenu title={<span><Icon type="user"/><span>商品管理</span></span>}>
+                                <Menu.Item>商品列表</Menu.Item>
+                                <Menu.Item>商品分类</Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    </Col>
                 </Row>
             </Col>
         )
