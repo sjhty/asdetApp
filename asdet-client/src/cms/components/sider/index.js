@@ -9,10 +9,10 @@ class Sider extends Component {
         return (
             <Col span={4} className="nav_sider">
                 <Row className="asdet_logo">
-                    {/* <Col>
+                    <Col>
                         <span className="logo chin_logo">雅茜•优艾</span>
                         <span className="logo eng_logo">ASDET</span>
-                    </Col> */}
+                    </Col>
                 </Row>
                 <Row>
                     <Col>
