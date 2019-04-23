@@ -1,27 +1,50 @@
 import React, { Component } from 'react'
 import { Row, Col, Menu, Icon } from 'antd'
-import '../sider/index.less'
+import MenuConfig from './menuConfig'
+import { NavLink } from 'react-router-dom'
+import './index.less'
 
 const SubMenu = Menu.SubMenu
 
 class Sider extends Component {
+
+    componentWillMount() {
+        const menuTree = this.renderMenu(MenuConfig);
+
+        this.setState({
+            menuTree
+        })
+    }
+
+    renderMenu = (data) => {
+        return data.map((item) =>{
+            if (item.children) {
+                return (
+                    <SubMenu title={<span><Icon type={item.icon} /><span>{item.title}</span></span>} key={item.url}>
+                        { this.renderMenu(item.children) }
+                    </SubMenu>
+                )
+            }
+
+            return <Menu.Item key={item.url}>
+                <NavLink to={item.url}><span><Icon type={item.icon} /><span>{item.title}</span></span></NavLink>
+                </Menu.Item>
+        })
+    }
+
     render () {
         return (
             <Col span={4} className="nav_sider">
                 <Row className="asdet_logo">
                     <Col>
-                        <span className="logo chin_logo">雅茜•优艾</span>
-                        <span className="logo eng_logo">ASDET</span>
+                        {/* <span className="logo chin_logo">雅茜•优艾</span>
+                        <span className="logo eng_logo">ASDET</span> */}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
                         <Menu theme="dark">
-                            <Menu.Item><span><Icon type="home"/><span>首页</span></span></Menu.Item>
-                            <SubMenu title={<span><Icon type="user"/><span>商品管理</span></span>}>
-                                <Menu.Item>商品列表</Menu.Item>
-                                <Menu.Item>商品分类</Menu.Item>
-                            </SubMenu>
+                            {this.state.menuTree}
                         </Menu>
                     </Col>
                 </Row>
