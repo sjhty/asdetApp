@@ -22,7 +22,7 @@ class BaseForm extends Component {
                     const INPUT = <FormItem label={label}>
                         {
                             getFieldDecorator([field])(
-                                <Input placeholder={placeholder} style={{width:width}}/>                        
+                                <Input placeholder={placeholder} style={{width:width}} key={i}/>                        
                             )
                         }
                     </FormItem>
@@ -33,7 +33,7 @@ class BaseForm extends Component {
                             getFieldDecorator([field],{
                                 initialValue: initialValue
                             })(
-                                <Select style={{width:width}}>
+                                <Select style={{width:width}} key={i}>
                                 {
                                     Utils.getOptionList(item.list)
                                 }  

@@ -10,12 +10,12 @@ class Routers extends Component {
         return (
             <Router>
                 <App>
-                    <Route path="/manage" render={() => 
+                    <Route path="/manage" render={() => (
                         <Manage>
                             <Route path="/manage/users/list" component={UserList}/>
                             <Route path="/manage/products/list" component={ProductList}/>
                         </Manage>
-                    }/>
+                    )}/>
                 </App>
             </Router>
         )
