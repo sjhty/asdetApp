@@ -9,6 +9,7 @@ class BaseForm extends Component {
     initFormList = () => {
         const { getFieldDecorator } = this.props.form;
         const formList = this.props.formList;
+        const formItemList = [];
         if (formList && formList.length > 0) {
             formList.forEach((item,i) => {
                 let type = item.type;
@@ -26,7 +27,7 @@ class BaseForm extends Component {
                             )
                         }
                     </FormItem>
-
+                    formItemList.push(INPUT);
                 } else if (type == 'SELECT') {
                     const SELECT = <FormItem label={label} key={field}>
                         {
@@ -41,6 +42,23 @@ class BaseForm extends Component {
                             )
                         }
                     </FormItem>
+                    formItemList.push(SELECT);
+                } else if (type == 'TIME_SELECT') {
+                    const BEGIN_TIME = <FormItem label={label} key={field}>
+                        {
+                            getFieldDecorator('begin_time')(
+                                <DatePicker placeholder='开始时间' showTime={true} format='YYYY-MM-DD HH:mm:ss'/>
+                            )
+                        }
+                    </FormItem>
+                    const END_TIME = <FormItem label={label} key={field}>
+                        {
+                            getFieldDecorator('end_time')(
+                                <DatePicker placeholder='结束时间' showTime={true} format='YYYY-MM-DD HH:mm:ss'/>
+                            )
+                        }
+                    </FormItem>
+                    formItemList.push(BEGIN_TIME,END_TIME);
                 }
             });
         }
