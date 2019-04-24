@@ -62,12 +62,14 @@ class BaseForm extends Component {
                 }
             });
         }
+
+        return formItemList;
     }
 
     render () {
         return (
             <div>
-
+                {this.initFormList()}
             </div>
         )
     }
