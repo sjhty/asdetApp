@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Form, Input, Select, DatePicker } from 'antd'
 import Utils from '../../../utils'
 const FormItem = Form.Item
-const Options = Select.Option
 
 class BaseForm extends Component {
 
@@ -23,7 +22,7 @@ class BaseForm extends Component {
                     const INPUT = <FormItem label={label} key={field}>
                         {
                             getFieldDecorator([field])(
-                                <Input placeholder={placeholder} width={width}/>                        
+                                <Input placeholder={placeholder} style={{width:width}}/>                        
                             )
                         }
                     </FormItem>
@@ -34,7 +33,7 @@ class BaseForm extends Component {
                             getFieldDecorator([field],{
                                 initialValue: initialValue
                             })(
-                                <Select width={width} placeholder={placeholder}>
+                                <Select style={{width:width}}>
                                 {
                                     Utils.getOptionList(item.list)
                                 }  

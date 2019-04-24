@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Form, Input } from 'antd'
+import BaseForm from '../../../components/baseForm'
 
 class List extends Component {
 
@@ -16,7 +17,7 @@ class List extends Component {
             label: '款式',
             field: 'style',
             placeholder: '全部',
-            initialValue: '1',
+            initialValue: 1,
             width: 80,
             list: [
                 {id: 0, name: '全部'},
@@ -25,19 +26,14 @@ class List extends Component {
             ]
         },
         {
-            type: 'TIME_SELECT',
-            label: '入库时间'
+            type: 'TIME_SELECT'
         }
     ]
 
     render () {
         return (
             <Card>
-                <Form>
-                    <Form.Item label="客户名称">
-                        <Input />
-                    </Form.Item>
-                </Form>
+                <BaseForm formList={this.FormList} key={this.FormList}/>
             </Card>
         )
     }
