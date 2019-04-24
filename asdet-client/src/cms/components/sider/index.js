@@ -16,6 +16,9 @@ class Sider extends Component {
         })
     }
 
+    /**
+     * 渲染左侧菜单导航
+     */
     renderMenu = (data) => {
         return data.map((item) =>{
             if (item.children) {
@@ -26,9 +29,11 @@ class Sider extends Component {
                 )
             }
 
-            return <Menu.Item key={item.url}>
-                <NavLink to={item.url}><span><Icon type={item.icon} /><span>{item.title}</span></span></NavLink>
-                </Menu.Item>
+            return  <Menu.Item key={item.url}>
+                        <NavLink to={item.url}>
+                            <span><Icon type={item.icon} /><span>{item.title}</span></span>
+                        </NavLink>
+                    </Menu.Item>
         })
     }
 
