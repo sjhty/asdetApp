@@ -3,6 +3,10 @@ import { Select } from 'antd';
 const Option = Select.Option;
 
 export default {
+    /**
+     * 遍历select options
+     * @param {*} data 
+     */
     getOptionList(data) {
         if (data) {
             const Options = [];
@@ -15,6 +19,9 @@ export default {
         }
     },
 
+    /**
+     * 格式化日期，YYYY-MM-DD HH:mm:ss
+     */
     formateDate(time) {
         if (time) {
             let year = time.getFullYear();
@@ -29,6 +36,9 @@ export default {
         }
     },
 
+    /**
+     * 格式化时分秒，个位数加0
+     */
     formateTime(str) {
         if (str < 10) {
             return "0" + str;
