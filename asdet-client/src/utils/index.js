@@ -13,5 +13,27 @@ export default {
         } else {
             return []
         }
+    },
+
+    formateDate(time) {
+        if (time) {
+            let year = time.getFullYear();
+            let month = this.formateTime(time.getMonth() + 1);
+            let day = this.formateTime(time.getDate());
+            let hour = this.formateTime(time.getHours());
+            let minute = this.formateTime(time.getMinutes());
+            let second = this.formateTime(time.getSeconds());
+            return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        } else {
+            return "";
+        }
+    },
+
+    formateTime(str) {
+        if (str < 10) {
+            return "0" + str;
+        } else {
+            return str;
+        }
     }
 }

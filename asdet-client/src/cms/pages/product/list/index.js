@@ -36,7 +36,7 @@ class List extends Component {
               title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left',
             },
             {
-              title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left',
+              title: 'Age', width: 100, dataIndex: 'age', key: 'age', 
             },
             {
               title: 'Column 1', dataIndex: 'address', key: '1', width: 150,
@@ -84,7 +84,7 @@ class List extends Component {
                     <BaseForm formList={this.FormList} key={this.FormList}/>
                 </Card>
                 <Card>
-                    <Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 250 }} />
+                    <Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 350 }} />
                 </Card>
             </div>
         )

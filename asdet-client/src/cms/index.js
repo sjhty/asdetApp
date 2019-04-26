@@ -10,11 +10,8 @@ class Home extends Component {
         return (
             <Row>
                 <Sider />
-                <Col span={20} className="main_content">
+                <Col span={20} offset={4} className="main_content">
                     <Header />
-                    <Breadcrumb separator=">" className="bread_nav">
-                        <Breadcrumb.Item>首页</Breadcrumb.Item>
-                    </Breadcrumb>
                     <Row className="con_box">
                         {this.props.children}
                     </Row>

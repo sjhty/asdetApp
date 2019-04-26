@@ -1,7 +1,54 @@
 .main_header {
-    color: #fff;
+    color: rgba(0, 0, 0, 0.85);
     .header_con {
         background: #fff;
-        height: 80px;
+        height: 100px;
+        .header_up {
+            border-bottom: 2px solid #CD6600;
+            .user_info {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 68px;
+                .welcome_note {
+                    vertical-align: middle;
+                    text-align: center;
+                }
+                .user_img {
+                    border: 1px solid #eee;
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    vertical-align: middle;
+                    margin-left: 5px;
+                    img {
+                        width: 100%;
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+        .heaser_down {
+            .breadCrumb {
+                height: 30px;
+                .bread_nav {
+                    margin-left: 40px;
+                    height: 30px;
+                    line-height: 30px;
+                };
+                label {
+                    width: 10px;
+                    height: 10px;
+                    background: #fff;
+                    transform: rotate(45deg);
+                    position: absolute;
+                    bottom: -5px;
+                    left: 50px;
+                }
+            }
+            
+        }
+        
     }
 }
