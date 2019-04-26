@@ -31,7 +31,13 @@ class Sider extends Component {
 
             return  <Menu.Item key={item.url}>
                         <NavLink to={item.url}>
-                            <span><Icon type={item.icon} /><span>{item.title}</span></span>
+                        {
+                            item.icon ? 
+                                <span><Icon type={item.icon} />
+                                    <span>{item.title}</span>
+                                </span> : 
+                                <span>{item.title}</span>
+                        }
                         </NavLink>
                     </Menu.Item>
         })

@@ -11,7 +11,8 @@ const menuList = [
         children: [
             {
                 title: '用户列表',
-                url: '/manage/users/list'
+                url: '/manage/users/list',
+                icon: ''
             }
         ]
     },
@@ -22,11 +23,13 @@ const menuList = [
         children: [
             {
                 title: '商品列表',
-                url: '/manage/products/list'
+                url: '/manage/products/list',
+                icon: ''
             },
             {
                 title: '商品分类',
-                url: '/manage/product/category'
+                url: '/manage/product/category',
+                icon: ''
             }
         ]
     }

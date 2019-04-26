@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, DatePicker } from 'antd'
+import { Form, Input, Select, DatePicker, Button } from 'antd'
 import Utils from '../../../utils'
 const FormItem = Form.Item
 
@@ -15,22 +15,22 @@ class BaseForm extends Component {
                 let field = item.field;
                 let label = item.label;
                 let placeholder = item.placeholder;
-                let initialValue = item.initialValue;
+                let initialValue = item.initialValue || '';
                 let width = item.width;
 
-                if (type == 'INPUT') {
-                    const INPUT = <FormItem label={label}>
+                if (type === 'INPUT') {
+                    const INPUT = <FormItem label={label} key={field}>
                         {
-                            getFieldDecorator([field])(
-                                <Input placeholder={placeholder} style={{width:width}} key={i}/>                        
+                            getFieldDecorator(field)(
+                                <Input type="text" placeholder={placeholder} style={{width:width}}/>                        
                             )
                         }
                     </FormItem>
                     formItemList.push(INPUT);
-                } else if (type == 'SELECT') {
-                    const SELECT = <FormItem label={label}>
+                } else if (type === 'SELECT') {
+                    const SELECT = <FormItem label={label} key={field}>
                         {
-                            getFieldDecorator([field],{
+                            getFieldDecorator(field,{
                                 initialValue: initialValue
                             })(
                                 <Select style={{width:width}} key={i}>
@@ -42,15 +42,15 @@ class BaseForm extends Component {
                         }
                     </FormItem>
                     formItemList.push(SELECT);
-                } else if (type == 'TIME_SELECT') {
-                    const BEGIN_TIME = <FormItem label={label}>
+                } else if (type === 'TIME_SELECT') {
+                    const BEGIN_TIME = <FormItem label="入库时间" key="begin_time">
                         {
                             getFieldDecorator('begin_time')(
                                 <DatePicker placeholder='开始时间' showTime={true} format='YYYY-MM-DD HH:mm:ss'/>
                             )
                         }
                     </FormItem>
-                    const END_TIME = <FormItem label='~' colon={false} >
+                    const END_TIME = <FormItem label='~' colon={false} key="end_time">
                         {
                             getFieldDecorator('end_time')(
                                 <DatePicker placeholder='结束时间' showTime={true} format='YYYY-MM-DD HH:mm:ss'/>
@@ -67,9 +67,13 @@ class BaseForm extends Component {
 
     render () {
         return (
-            <div>
+            <Form layout = 'inline'>
                 {this.initFormList()}
-            </div>
+                <FormItem>
+                    <Button type="primary" style={{ margin: "0 20px" }}>查询</Button>
+                    <Button>重置</Button>
+                </FormItem>
+            </Form>
         )
     }
 }
