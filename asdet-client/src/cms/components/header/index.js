@@ -37,7 +37,9 @@ class Header extends Component {
                             <span className="time">
                                 {this.state.nowTime}
                             </span>
-                            <span className="weather"></span>
+                            <span className="weather">
+                            
+                            </span>
                         </Col>
                     </Row>
                 </Col>
