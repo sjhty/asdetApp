@@ -33,51 +33,43 @@ class List extends Component {
     render () {
         const columns = [
             {
-              title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left',
+              title: '商品名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left',
             },
             {
-              title: 'Age', width: 100, dataIndex: 'age', key: 'age', 
+              title: '商品分类', width: 100, dataIndex: 'category', key: 'category', 
             },
             {
-              title: 'Column 1', dataIndex: 'address', key: '1', width: 150,
+              title: '商品颜色', dataIndex: 'color', key: 'color', width: 150,
             },
             {
-              title: 'Column 2', dataIndex: 'address', key: '2', width: 150,
+              title: '商品型号', dataIndex: 'type', key: 'type', width: 150,
             },
             {
-              title: 'Column 3', dataIndex: 'address', key: '3', width: 150,
+              title: '商品尺码', dataIndex: 'size', key: 'size', width: 150,
             },
             {
-              title: 'Column 4', dataIndex: 'address', key: '4', width: 150,
+              title: '商品售价', dataIndex: 'price', key: 'price', width: 150,
             },
             {
-              title: 'Column 5', dataIndex: 'address', key: '5', width: 150,
+              title: '部长拿货价', dataIndex: 'address', key: '5', width: 150,
             },
             {
-              title: 'Column 6', dataIndex: 'address', key: '6', width: 150,
+              title: '理事拿货价', dataIndex: 'address', key: '6', width: 150,
             },
             {
-              title: 'Column 7', dataIndex: 'address', key: '7', width: 150,
+              title: '社长拿货价', dataIndex: 'address', key: '7', width: 150,
             },
-            { title: 'Column 8', dataIndex: 'address', key: '8' },
+            { title: '商品库存', dataIndex: 'stock', key: 'stock' },
             {
-              title: 'Action',
+              title: '操作',
               key: 'operation',
               fixed: 'right',
               width: 100,
-              render: () => <a href="javascript:;">action</a>,
+              render: () => <span><a href="javascript:;">修改</a><a href="javascript:;">添加库存</a></span>,
             },
           ];
           
           const data = [];
-          for (let i = 0; i < 100; i++) {
-            data.push({
-              key: i,
-              name: `Edrward ${i}`,
-              age: 32,
-              address: `London Park no. ${i}`,
-            });
-          }
         return (
             <div>
                 <Card>
