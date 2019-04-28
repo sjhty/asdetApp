@@ -30,6 +30,10 @@ const menuList = [
                 title: '商品分类',
                 url: '/manage/products/category',
                 icon: ''
+            },
+            {
+                title: '借还商品',
+                url: '/manage/products/borrow'
             }
         ]
     },

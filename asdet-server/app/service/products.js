@@ -18,20 +18,31 @@ class ProductService extends Service {
     async findList(query) {
         const { ctx, app } = this;
         const Op = app.Sequelize.Op;
-
-        //console.log(query)
-        const categoryObj = {
-            include: [{
-                model: this.ctx.model.Category,
-                as: 'category',
-                attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price'],
-                where: {
-                    '$products.name$': {
-                        [Op.like]:'%'+query.name+'%'
+        let categoryObj = {}
+        console.log("-------"+query)
+        if (!Object.getOwnPropertyNames(query)){
+            categoryObj = {
+                include: [{
+                    model: this.ctx.model.Category,
+                    as: 'category',
+                    attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price'],
+                    where: {
+                        '$products.name$': {
+                            [Op.like]:'%'+query.name+'%'
+                        }
                     }
-                }
-            }]
+                }]
+            }
+        } else {
+            categoryObj = {
+                include: [{
+                    model: this.ctx.model.Category,
+                    as: 'category',
+                    attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price']
+                }]
+            }
         }
+        
 
         const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj))
 

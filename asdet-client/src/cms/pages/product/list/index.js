@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
 import { Card, Table } from 'antd'
 import BaseForm from '../../../components/baseForm'
+import Api from '../../../../axios/api/productsApi'
 
 class List extends Component {
+    state = {}
+    componentWillMount() {
+      this.getData()
+    }
+
+    getData = () => { 
+      Api.getCountAndProducts()
+      .then((res) => {
+        let list = res.data.map((item, index) => {
+            item.key = index;
+            return item;
+        });
+        this.setState({
+          data: list
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
 
     FormList = [
         {
@@ -33,50 +53,50 @@ class List extends Component {
     render () {
         const columns = [
             {
-              title: '商品名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left',
+              title: '商品名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left', align: 'center',
             },
             {
-              title: '商品分类', width: 100, dataIndex: 'category', key: 'category', 
+              title: '商品分类', width: 100, dataIndex: 'category', key: 'category', align: 'center',
             },
             {
-              title: '商品颜色', dataIndex: 'color', key: 'color', width: 150,
+              title: '商品颜色', dataIndex: 'color', key: 'color', width: 150, align: 'center',
             },
             {
-              title: '商品型号', dataIndex: 'type', key: 'type', width: 150,
+              title: '商品型号', dataIndex: 'type', key: 'type', width: 150, align: 'center',
             },
             {
-              title: '商品尺码', dataIndex: 'size', key: 'size', width: 150,
+              title: '商品尺码', dataIndex: 'size', key: 'size', width: 150, align: 'center',
             },
             {
-              title: '商品售价', dataIndex: 'price', key: 'price', width: 150,
+              title: '商品售价', dataIndex: 'category.price', key: 'category.price', width: 150, align: 'center',
             },
             {
-              title: '部长拿货价', dataIndex: 'address', key: '5', width: 150,
+              title: '部长拿货价', dataIndex: 'category.minister_price', key: 'category.minister_price', width: 150, align: 'center',
             },
             {
-              title: '理事拿货价', dataIndex: 'address', key: '6', width: 150,
+              title: '理事拿货价', dataIndex: 'category.director_price', key: 'category.director_price', width: 150, align: 'center',
             },
             {
-              title: '社长拿货价', dataIndex: 'address', key: '7', width: 150,
+              title: '社长拿货价', dataIndex: 'category.president_price', key: 'category.president_price', width: 150, align: 'center',
             },
-            { title: '商品库存', dataIndex: 'stock', key: 'stock' },
+            { title: '商品库存', dataIndex: 'stock', key: 'stock', width: 150, align: 'center', },
+            { title: '创建时间', dataIndex: 'created_at', key: 'created_at', width: 150, align: 'center',},
             {
               title: '操作',
               key: 'operation',
               fixed: 'right',
               width: 100,
-              render: () => <span><a href="javascript:;">修改</a><a href="javascript:;">添加库存</a></span>,
+              render: () => <span><a href="">修改</a><a href="">添加库存</a></span>,
             },
           ];
-          
-          const data = [];
+
         return (
             <div>
                 <Card>
                     <BaseForm formList={this.FormList} key={this.FormList}/>
                 </Card>
                 <Card>
-                    <Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 350 }} />
+                    <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1500, y: 350 }} />
                 </Card>
             </div>
         )
