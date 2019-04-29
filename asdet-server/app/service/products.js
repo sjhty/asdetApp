@@ -18,30 +18,45 @@ class ProductService extends Service {
     async findList(query) {
         const { ctx, app } = this;
         const Op = app.Sequelize.Op;
-        let categoryObj = {}
-        console.log(query)
-        if (!Object.getOwnPropertyNames(query)){
-            categoryObj = {
+        let whereObj = {}
+        if (query.name !== '' && query.style !== '0' && query.size !== '0') {
+            whereObj = {
+                '$products.name$': {
+                    [Op.like]:'%'+query.name+'%'
+                },
+                '$products.productType$': query.style,
+                '$products.size$': query.size
+            }
+        } else if (query.name !== '' && query.style !== '0' && query.size === '0'){
+            whereObj = {
+                '$products.name$': {
+                    [Op.like]:'%'+query.name+'%'
+                },
+                '$products.productType$': query.style
+            }
+        } else if (query.name !== '' && query.style === '0' && query.size !== '0'){
+            whereObj = {
+                '$products.name$': {
+                    [Op.like]:'%'+query.name+'%'
+                },
+                '$products.size$': query.size
+            }
+        } else if (query.name !== '' && query.style === '0' && query.size === '0'){
+            whereObj = {
+                '$products.name$': {
+                    [Op.like]:'%'+query.name+'%'
+                }
+            }
+        }
+
+        let categoryObj = {
                 include: [{
                     model: this.ctx.model.Category,
                     as: 'category',
                     attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price'],
-                    where: {
-                        '$products.name$': {
-                            [Op.like]:'%'+query.name+'%'
-                        }
-                    }
+                    where: whereObj
                 }]
             }
-        } else {
-            categoryObj = {
-                include: [{
-                    model: this.ctx.model.Category,
-                    as: 'category',
-                    attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price']
-                }]
-            }
-        }
         
 
         const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj))

@@ -5,6 +5,7 @@ import ProductsApi from '../../../../axios/api/productsApi'
 
 class Cart extends Component {
     state = {}
+    params = {}
     componentWillMount() {
         this.getProductData()
     }
@@ -86,15 +87,36 @@ class Cart extends Component {
         }
     ]
     
+    /**
+     * 获取商品列表
+     */
     getProductData = () => {
-        ProductsApi.getCountAndProducts()
+        ProductsApi.getCountAndProducts(this.params)
             .then((res) => {
-                let list = []
+                let list = [],type='',size='';
                 res.data.map((item, index) => {
+                    if (item.productType === '1') {
+                        type = 'A款'
+                    } else {
+                        type = 'B款'
+                    }
+                    if (item.size === '1') {
+                        size = 'S'
+                    } else if (item.size === '2') {
+                        size = 'M'
+                    } else if (item.size === '3') {
+                        size = 'L'
+                    } else if (item.size === '4') {
+                        size = 'XL'
+                    } else if (item.size === '5') {
+                        size = 'XXL'
+                    } else if (item.size === '6') {
+                        size = 'XXXL'
+                    }
                     let dataObj = {
                         key: index,
                         name: item.name,
-                        attribute: '【'+item.color+'】,'+item.productType+' '+item.size,
+                        attribute: '【'+item.color+'】,'+type+' '+size,
                         stock: item.stock,
                         price: item.category.price,
                         minister_price: item.category.minister_price,
@@ -107,6 +129,11 @@ class Cart extends Component {
                     productData: list
                 })
             })
+    }
+
+    handleFilter = (params) => {
+        this.params = params;
+        this.getProductData();
     }
 
     
@@ -172,7 +199,7 @@ class Cart extends Component {
                     <Table columns={orderColumns} dataSource={this.state.data} scroll={{y: 300 }} style={{marginTop: "20px"}}/>
                 </Card>
                 <Card title="下单商品列表">
-                    <BaseForm formList={this.productInfoList} key={this.productInfoList}/>
+                    <BaseForm formList={this.productInfoList} key={this.productInfoList} filterSubmit={this.handleFilter}/>
                     <Table columns={productColumns} dataSource={this.state.productData} scroll={{y: 300 }} style={{marginTop: "20px"}}/>
                 </Card>
             </div>

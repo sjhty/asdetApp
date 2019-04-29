@@ -6,12 +6,13 @@ import Api from '../../../../axios/api/productsApi'
 
 class List extends Component {
     state = {}
+    params = {}
     componentWillMount() {
       this.getData()
     }
 
     getData = () => { 
-      Api.getCountAndProducts()
+      Api.getCountAndProducts(this.params)
       .then((res) => {
         let list = res.data.map((item, index) => {
             item.key = index;
@@ -24,6 +25,11 @@ class List extends Component {
         console.log(err)
       })
     }
+
+    handleFilter = (params) => {
+      this.params = params;
+      this.getData();
+  }
 
     FormList = [
         {
@@ -38,11 +44,11 @@ class List extends Component {
             label: '款式',
             field: 'style',
             placeholder: '全部',
-            initialValue: 1,
+            initialValue: '0',
             width: 80,
             list: [
-                {id: 1, name: 'A款'},
-                {id: 2, name: 'B款'}
+                {id: '1', name: 'A款'},
+                {id: '2', name: 'B款'}
             ]
         },
         {
@@ -67,6 +73,15 @@ class List extends Component {
             },
             {
               title: '商品型号', dataIndex: 'type', key: 'type', width: 100, align: 'center',
+              render: (text) => {
+                let temp = ''
+                if (text === '1') {
+                    temp = 'A款'
+                } else {
+                    temp = 'B款'
+                }
+                return temp
+              }
             },
             {
               title: '商品尺码', dataIndex: 'size', key: 'size', width: 100, align: 'center',
@@ -107,7 +122,7 @@ class List extends Component {
         return (
             <div>
                 <Card>
-                    <BaseForm formList={this.FormList} key={this.FormList}/>
+                    <BaseForm formList={this.FormList} key={this.FormList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card>
                     <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1500, y: 500 }} />

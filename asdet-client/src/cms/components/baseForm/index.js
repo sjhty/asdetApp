@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
 import { Form, Input, Select, DatePicker, Button } from 'antd'
+import Moment from 'moment'
 import Utils from '../../../utils'
 const FormItem = Form.Item
 
 class BaseForm extends Component {
+
+    handleFilterSubmit = () => {
+        let fieldsValue = this.props.form.getFieldsValue();
+        console.log(fieldsValue)
+        this.props.filterSubmit(fieldsValue);
+    }
 
     initFormList = () => {
         const { getFieldDecorator } = this.props.form;
@@ -59,8 +66,8 @@ class BaseForm extends Component {
                     </FormItem>
                     formItemList.push(BEGIN_TIME,END_TIME);
                 } else if (type === 'BUTTON') {
-                    const BUTTON = <FormItem>
-                        <Button type="primary" style={{ marginRight: "10px" }}>{label}</Button>
+                    const BUTTON = <FormItem key="btn">
+                        <Button type="primary" style={{ marginRight: "10px" }} onClick={this.handleFilterSubmit}>{label}</Button>
                         <Button>重置</Button>
                     </FormItem>
                     formItemList.push(BUTTON);
