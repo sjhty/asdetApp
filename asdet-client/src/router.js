@@ -6,6 +6,7 @@ import Home from './cms/pages/home'
 import UserList from './cms/pages/user/list'
 import ProductList from './cms/pages/product/list'
 import ProductCategory from './cms/pages/product/category'
+import Cart from './cms/pages/order/cart'
 
 class Routers extends Component {
     render () {
@@ -18,6 +19,7 @@ class Routers extends Component {
                             <Route path="/manage/users/list" component={UserList}/>
                             <Route path="/manage/products/list" component={ProductList}/>
                             <Route path="/manage/products/category" component={ProductCategory}/>
+                            <Route path="/manage/orders/cart" component={Cart}/>
                         </Manage>
                     )}/>
                 </App>

@@ -58,6 +58,12 @@ class BaseForm extends Component {
                         }
                     </FormItem>
                     formItemList.push(BEGIN_TIME,END_TIME);
+                } else if (type === 'BUTTON') {
+                    const BUTTON = <FormItem>
+                        <Button type="primary" style={{ marginRight: "10px" }}>{label}</Button>
+                        <Button>重置</Button>
+                    </FormItem>
+                    formItemList.push(BUTTON);
                 }
             });
         }
@@ -69,10 +75,6 @@ class BaseForm extends Component {
         return (
             <Form layout = 'inline'>
                 {this.initFormList()}
-                <FormItem>
-                    <Button type="primary" style={{ margin: "0 20px" }}>查询</Button>
-                    <Button>重置</Button>
-                </FormItem>
             </Form>
         )
     }

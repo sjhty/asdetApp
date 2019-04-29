@@ -1,4 +1,4 @@
-import { get, post} from '../config'
+import { post} from '../config'
 
 const getCountAndProducts = (params) => {
     return post('/products/search',params);

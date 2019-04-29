@@ -37,10 +37,10 @@ class Category extends Component {
                 align: 'right', 
                 render: (text, row, index) => {
                     if (index < 20) {
-                      return <a href="javascript:;">{text}</a>;
+                      return <a href="###">{text}</a>;
                     }
                     return {
-                      children: <a href="javascript:;">{text}</a>,
+                      children: <a href="###">{text}</a>,
                       props: {
                         colSpan: 5,
                       },

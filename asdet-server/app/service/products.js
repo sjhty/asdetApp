@@ -19,7 +19,7 @@ class ProductService extends Service {
         const { ctx, app } = this;
         const Op = app.Sequelize.Op;
         let categoryObj = {}
-        console.log("-------"+query)
+        console.log(query)
         if (!Object.getOwnPropertyNames(query)){
             categoryObj = {
                 include: [{
