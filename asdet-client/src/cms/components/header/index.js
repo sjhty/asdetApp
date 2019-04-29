@@ -22,7 +22,7 @@ class Header extends Component {
                     <Row className="header_up">
                         <Col span={19}></Col>
                         <Col span={5} className="user_info">
-                            <span className="welcome_note">欢迎您，<b>一叶孤舟</b></span>
+                            <span className="welcome_note">欢迎您，<b>微笑</b></span>
                             <span className="user_img"><img src={LoginImg} alt="logo_img"/></span>
                         </Col>
                     </Row>

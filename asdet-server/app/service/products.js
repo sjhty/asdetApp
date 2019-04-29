@@ -18,7 +18,17 @@ class ProductService extends Service {
     async findList(query) {
         const { ctx, app } = this;
         const Op = app.Sequelize.Op;
-        let whereObj = {}
+        let whereObj = {};
+        let name = query.name ? query.name : '';
+        let type = query.style ? query.style : null;
+        let size= query.size ? query.size : null;
+        let begin_time = query.begin_time ? query.begin_time : null;
+        let end_time = query.end_time ? query.end_time : null;
+
+        if (name !== '' && type !== '0' && type !== null ){
+
+        }
+
         if (query.name !== '' && query.style !== '0' && query.size !== '0') {
             whereObj = {
                 '$products.name$': {
