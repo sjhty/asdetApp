@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Modal } from 'antd'
 import Moment from 'moment'
 import BaseForm from '../../../components/baseForm'
 import Api from '../../../../axios/api/productsApi'
@@ -29,7 +29,26 @@ class List extends Component {
     handleFilter = (params) => {
       this.params = params;
       this.getData();
-  }
+    }
+
+    showModal = (key) => {
+      console.log(key)
+      // this.setState({
+      //   visible: true,
+      // });
+    }
+
+    handleOk = (e) => {
+      this.setState({
+        visible: false,
+      });
+    }
+  
+    handleCancel = (e) => {
+      this.setState({
+        visible: false,
+      });
+    }
 
     FormList = [
         {
@@ -60,6 +79,21 @@ class List extends Component {
         }
     ];
 
+    requestFormList = [
+        {
+          type: 'INPUT',
+          label: '商品名称',
+          field: 'name',
+          width: 130
+        },
+        {
+          type: 'INPUT',
+          label: '商品库存',
+          field: 'stock',
+          width: 130
+        },
+    ]
+    
     render () {
         const columns = [
             {
@@ -72,19 +106,33 @@ class List extends Component {
               title: '商品颜色', dataIndex: 'color', key: 'color', width: 100, align: 'center',
             },
             {
-              title: '商品型号', dataIndex: 'type', key: 'type', width: 100, align: 'center',
+              title: '商品型号', dataIndex: 'productType', key: 'productType', width: 100, align: 'center',
               render: (text) => {
-                let temp = ''
+
                 if (text === '1') {
-                    temp = 'A款'
+                    return 'A款';
                 } else {
-                    temp = 'B款'
+                    return 'B款';
                 }
-                return temp
-              }
+              },
             },
             {
               title: '商品尺码', dataIndex: 'size', key: 'size', width: 100, align: 'center',
+              render: (text) => {
+                if (text === '1') {
+                    return 'S'
+                } else if (text === '2'){
+                    return 'M'
+                } else if (text === '3'){
+                    return 'L'
+                } else if (text === '4'){
+                    return 'XL'
+                } else if (text === '5'){
+                    return 'XXL'
+                } else if (text === '6'){
+                    return 'XXXL'
+                }
+              }
             },
             {
               title: '商品售价', dataIndex: 'category.price', key: 'category.price', width: 100, align: 'center',
@@ -115,7 +163,12 @@ class List extends Component {
               fixed: 'right',
               width: 100,
               align: 'center',
-              render: () => (<span><a href="###">修改</a><br></br><a href="###">添加库存</a></span>),
+              render: (record) => 
+                <span>
+                  <a href="###">修改</a>
+                  <br></br>
+                  <a href="javascript:;" onClick={this.showModal(record)}>添加库存</a>
+                </span>,
             },
           ];
 
@@ -127,6 +180,9 @@ class List extends Component {
                 <Card>
                     <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1500, y: 500 }} />
                 </Card>
+                <Modal title="添加库存" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                    <BaseForm formList={this.requestFormList} key={this.requestFormList}/>
+                </Modal>
             </div>
         )
     }

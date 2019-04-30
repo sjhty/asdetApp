@@ -1,4 +1,5 @@
 const Service = require('egg').Service;
+const ProductCondition = require('./condition/productsCondition')
 class ProductService extends Service {
     /**
      * 添加商品
@@ -18,46 +19,7 @@ class ProductService extends Service {
     async findList(query) {
         const { ctx, app } = this;
         const Op = app.Sequelize.Op;
-        let whereObj = {};
-        let name = query.name ? query.name : '';
-        let type = query.style ? query.style : null;
-        let size= query.size ? query.size : null;
-        let begin_time = query.begin_time ? query.begin_time : null;
-        let end_time = query.end_time ? query.end_time : null;
-
-        if (name !== '' && type !== '0' && type !== null ){
-
-        }
-
-        if (query.name !== '' && query.style !== '0' && query.size !== '0') {
-            whereObj = {
-                '$products.name$': {
-                    [Op.like]:'%'+query.name+'%'
-                },
-                '$products.productType$': query.style,
-                '$products.size$': query.size
-            }
-        } else if (query.name !== '' && query.style !== '0' && query.size === '0'){
-            whereObj = {
-                '$products.name$': {
-                    [Op.like]:'%'+query.name+'%'
-                },
-                '$products.productType$': query.style
-            }
-        } else if (query.name !== '' && query.style === '0' && query.size !== '0'){
-            whereObj = {
-                '$products.name$': {
-                    [Op.like]:'%'+query.name+'%'
-                },
-                '$products.size$': query.size
-            }
-        } else if (query.name !== '' && query.style === '0' && query.size === '0'){
-            whereObj = {
-                '$products.name$': {
-                    [Op.like]:'%'+query.name+'%'
-                }
-            }
-        }
+        const whereObj = ProductCondition.sqlCondition(Op,query);
 
         let categoryObj = {
                 include: [{
@@ -66,9 +28,7 @@ class ProductService extends Service {
                     attributes: ['name', 'price', 'minister_price', 'director_price', 'president_price'],
                     where: whereObj
                 }]
-            }
-        
-
+            };
         const result = ctx.helper.formatData(await ctx.model.Products.findAll(categoryObj))
 
         return result;

@@ -8,6 +8,12 @@ class BaseForm extends Component {
 
     handleFilterSubmit = () => {
         let fieldsValue = this.props.form.getFieldsValue();
+        if (fieldsValue.begin_time) {
+            fieldsValue.begin_time = Moment(fieldsValue.begin_time).format('YYYY-MM-DD HH:mm:ss');
+        }
+        if (fieldsValue.end_time) {
+            fieldsValue.end_time = Moment(fieldsValue.end_time).format('YYYY-MM-DD HH:mm:ss');
+        }
         console.log(fieldsValue)
         this.props.filterSubmit(fieldsValue);
     }
@@ -24,6 +30,7 @@ class BaseForm extends Component {
                 let placeholder = item.placeholder;
                 let initialValue = item.initialValue || '';
                 let width = item.width;
+                let mode = item.mode;
 
                 if (type === 'INPUT') {
                     const INPUT = <FormItem label={label} key={field}>
@@ -40,7 +47,7 @@ class BaseForm extends Component {
                             getFieldDecorator(field,{
                                 initialValue: initialValue
                             })(
-                                <Select style={{width:width}} key={i}>
+                                <Select style={{width:width}} key={i} mode={mode}>
                                 {
                                     Utils.getOptionList(item.list)
                                 }  
