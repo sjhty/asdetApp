@@ -4,7 +4,7 @@ module.exports = {
     sqlCondition(Op,query) {
         let whereObj = {};
         let name = query.name ? query.name : null;
-        let type = query.style && query.style !== '0' ? query.style : null;
+        let type = query.productType && query.productType !== '0' ? query.productType : null;
         let size= query.size && query.size !== '0' ? query.size : null;
         let begin_time = query.begin_time ? query.begin_time : null;
         let end_time = query.end_time ? query.end_time : null;

@@ -57,12 +57,10 @@ class ProductService extends Service {
      * @param {*} query 
      * @param {*} product 
      */
-    async updateProduct(id,info) {
+    async updateProduct( id, info) {
         const { ctx } = this;
         const product = await ctx.model.Products.findById(id);
         let result='';
-
-        console.log(info)
 
         if (!product) {
             ctx.status = 404;

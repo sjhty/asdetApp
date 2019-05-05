@@ -14,6 +14,9 @@ class BaseForm extends Component {
         if (fieldsValue.end_time) {
             fieldsValue.end_time = Moment(fieldsValue.end_time).format('YYYY-MM-DD HH:mm:ss');
         }
+        if (fieldsValue.newStock) {
+            fieldsValue.stock = Number(fieldsValue.newStock) + Number(fieldsValue.stock);
+        }
         console.log(fieldsValue)
         this.props.filterSubmit(fieldsValue);
     }
@@ -28,15 +31,20 @@ class BaseForm extends Component {
                 let field = item.field;
                 let label = item.label;
                 let placeholder = item.placeholder;
-                let initialValue = item.initialValue || '';
+                let initialValue = item.initialValue || '' || '0';
                 let width = item.width;
                 let mode = item.mode;
+                let disabled = item.disabled;
+                let btnClass = item.className;
+                let resetBtnShow = item.resetBtn;
 
                 if (type === 'INPUT') {
                     const INPUT = <FormItem label={label} key={field}>
                         {
-                            getFieldDecorator(field)(
-                                <Input type="text" placeholder={placeholder} style={{width:width}}/>                        
+                            getFieldDecorator(field,{
+                                initialValue: initialValue
+                            })(
+                                <Input type="text" placeholder={placeholder} style={{width:width}} disabled={disabled}/>                        
                             )
                         }
                     </FormItem>
@@ -47,7 +55,7 @@ class BaseForm extends Component {
                             getFieldDecorator(field,{
                                 initialValue: initialValue
                             })(
-                                <Select style={{width:width}} key={i} mode={mode}>
+                                <Select style={{width:width}} key={i} mode={mode} disabled={disabled}>
                                 {
                                     Utils.getOptionList(item.list)
                                 }  
@@ -73,15 +81,14 @@ class BaseForm extends Component {
                     </FormItem>
                     formItemList.push(BEGIN_TIME,END_TIME);
                 } else if (type === 'BUTTON') {
-                    const BUTTON = <FormItem key="btn">
+                    const BUTTON = <FormItem key="btn" className={btnClass}>
                         <Button type="primary" style={{ marginRight: "10px" }} onClick={this.handleFilterSubmit}>{label}</Button>
-                        <Button>重置</Button>
+                        <Button className={resetBtnShow}>重置</Button>
                     </FormItem>
                     formItemList.push(BUTTON);
                 }
             });
         }
-
         return formItemList;
     }
 
