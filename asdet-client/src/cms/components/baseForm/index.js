@@ -65,7 +65,7 @@ class BaseForm extends Component {
                     </FormItem>
                     formItemList.push(SELECT);
                 } else if (type === 'TIME_SELECT') {
-                    const BEGIN_TIME = <FormItem label="入库时间" key="begin_time">
+                    const BEGIN_TIME = <FormItem label="入库时间" key="begin_time" style={{marginRight: '10px'}}>
                         {
                             getFieldDecorator('begin_time')(
                                 <DatePicker placeholder='开始时间' showTime={true} format='YYYY-MM-DD HH:mm:ss'/>

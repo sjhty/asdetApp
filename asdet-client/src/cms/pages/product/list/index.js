@@ -17,18 +17,34 @@ class List extends Component {
             label: '商品名称',
             field: 'name',
             placeholder: '请输入商品名称',
-            width: 130
+            width: 180
         },
         {
             type: 'SELECT',
-            label: '款式',
+            label: '商品型号',
             field: 'productType',
             placeholder: '全部',
             initialValue: '0',
-            width: 80,
+            width: 150,
             list: [
                 {id: '1', name: 'A款'},
                 {id: '2', name: 'B款'}
+            ]
+        },
+        {
+            type: 'SELECT',
+            label: '商品尺码',
+            field: 'size',
+            placeholder: '全部',
+            initialValue: '0',
+            width: 150,
+            list: [
+              {id: '1', name: 'S'},
+              {id: '2', name: 'M'},
+              {id: '3', name: 'L'},
+              {id: '4', name: 'XL'},
+              {id: '5', name: 'XXL'},
+              {id: '6', name: 'XXXL'},
             ]
         },
         {
@@ -248,16 +264,17 @@ class List extends Component {
             width: 100,
             align: 'center',
             render: ( text, item ) => {
-              return <Button size="small" onClick={ () => { this.showModal(item) }}>编辑</Button>
+              return <span><Button size="small" onClick={ () => { this.showModal(item) }}>修改</Button><Button size="small" onClick={ () => { this.showModal(item) }}>入库</Button></span>
             }
           },
         ]
         return (
             <div>
-                <Card>
+                <Card className="search_condition">
                     <BaseForm formList={this.FormList} key={this.FormList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card className="table_data">
+                    <Button type="primary">添加商品</Button>
                     <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1500, y: 500 }}/>
                 </Card>
                 <Modal title="添加库存" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>
