@@ -275,7 +275,7 @@ class List extends Component {
                 </Card>
                 <Card className="table_data">
                     <Button type="primary">添加商品</Button>
-                    <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1500, y: 500 }}/>
+                    <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1250, y: 500 }}/>
                 </Card>
                 <Modal title="添加库存" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>
                     <BaseForm formList={this.requestFormList} key={this.requestFormList} filterSubmit={this.handleFilterUpdate}/>
