@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { Card, Table, Modal, Button, notification } from 'antd'
 import Moment from 'moment'
 import BaseForm from '../../../components/baseForm'
-import Api from '../../../../axios/api/productsApi'
+import ProductApi from '../../../../axios/api/productsApi'
+import CategoryApi from '../../../../axios/api/categoryApi'
 import '../list/index.less'
 
 class List extends Component {
@@ -10,7 +11,44 @@ class List extends Component {
       params: {},
       visible: false,
     }
-    requestFormList = []
+    requestFormList = [
+      {
+          type: 'INPUT',
+          label: '商品名称',
+          field: 'name',
+          placeholder: '请输入商品名称',
+          width: 300
+      },
+      {
+          type: 'SELECT',
+          label: '商品型号',
+          field: 'productType',
+          placeholder: '全部',
+          initialValue: '0',
+          width: 300,
+          list: [
+              {id: '1', name: 'A款'},
+              {id: '2', name: 'B款'}
+          ]
+      },
+      {
+          type: 'SELECT',
+          label: '商品尺码',
+          field: 'size',
+          placeholder: '全部',
+          initialValue: '0',
+          width: 300,
+          list: [
+            {id: '1', name: 'S'},
+            {id: '2', name: 'M'},
+            {id: '3', name: 'L'},
+            {id: '4', name: 'XL'},
+            {id: '5', name: 'XXL'},
+            {id: '6', name: 'XXXL'},
+          ]
+      },
+      
+    ]
     FormList = [
         {
             type: 'INPUT',
@@ -55,12 +93,14 @@ class List extends Component {
             label: '查询'
         }
     ];
+    
     componentDidMount() {
-      this.getData()
+      this.getProductList();
+      this.getCategoryList();
     }
 
-    getData = () => { 
-      Api.getCountAndProducts(this.state.params)
+    getProductList = () => { 
+      ProductApi.getCountAndProducts(this.state.params)
       .then((res) => {
         res.data.map((item, index) => {
             item.key = index;
@@ -73,14 +113,47 @@ class List extends Component {
       })
     }
 
+    getCategoryList = () => { 
+      CategoryApi.getCategoryList()
+      .then((res) => {
+        let list = [];
+        res.data.map((item, index) => {
+            item.key = index;
+            let obj = {
+              id: item.id,
+              name: item.name
+            }
+            list.push(obj)
+        })
+        this.requestFormList.push({
+            type: 'SELECT',
+            label: '商品分类',
+            field: 'category_id',
+            placeholder: '全部',
+            initialValue: '0',
+            width: 300,
+            list: list
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
     handleFilter = (params) => {
+      if (params.begin_time) {
+        params.begin_time = Moment(params.begin_time).format('YYYY-MM-DD HH:mm:ss');
+      }
+      if (params.end_time) {
+        params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
+      }
       this.state.params = params;
-      this.getData();
+      this.getProductList();
     }
 
     handleFilterUpdate = (params) => {
+      params.stock = params.newStock ? Number(params.newStock) + Number(params.stock) : Number(params.stock);
       this.state.params = params;
-      Api.updateProduct(this.state.params)
+      ProductApi.updateProduct(this.state.params)
         .then( (res) => {
           if (res.success === true) {
             this.setState({
@@ -90,7 +163,7 @@ class List extends Component {
               message: '商品入库成功',
               description: '新入库商品【'+this.state.params.newStock+'】件，现有库存【'+res.data.stock+'】件',
             });
-            this.getData();
+            this.getProductList();
           } else {
             alert('修改失败');
           }
@@ -99,54 +172,57 @@ class List extends Component {
         })
     }
 
-    showModal = (record) => {
-      this.requestFormList = [];
+    pushFormList(type,label,key,option,data,list) {
+      let isEdit = true,initValue = '';
+      if (option === 'edit') {
+        isEdit = false;
+        initValue = data[key]
+      } else if (option === 'stock') {
+        initValue = data[key]
+      } else {
+        isEdit = false;
+      }
+      let formObj = {
+          type: type,
+          label: label,
+          field: key,
+          width: 300,
+          disabled: isEdit,
+          initialValue: initValue
+      }
+
+      if (type === 'SELECT') {
+        formObj.list = list
+      }
+
+      return formObj;
+    }
+
+    showModal = (option,record) => {
+      if (option) {
+        this.requestFormList = [];
+      }
+      
       this.setState({
         visible: true,
       });
 
       for (const key in record) {
-        let formObj = {
-            type: '',
-            label: '',
-            field: '',
-            width: 300
-        }
         if (key === 'id') {
-          formObj.type = 'INPUT';
-          formObj.label = '商品编号';
-          formObj.field = key;
-          formObj.disabled = true;
-          formObj.initialValue = record[key];
-          this.requestFormList.push(formObj)
+          this.requestFormList.push(this.pushFormList('INPUT','商品编号',key,option,record))
         }
         if (key === 'name') {
-          formObj.type = 'INPUT';
-          formObj.label = '商品名称';
-          formObj.field = key;
-          formObj.disabled = true;
-          formObj.initialValue = record[key];
-          this.requestFormList.push(formObj)
+          this.requestFormList.push(this.pushFormList('INPUT','商品名称',key,option,record))
         }
         if (key === 'productType') {
-          formObj.type = 'SELECT';
-          formObj.label = '商品型号';
-          formObj.field = key;
-          formObj.disabled = true;
-          formObj.initialValue = record[key];
-          formObj.list = [
+          let options = [
             {id: '1', name: 'A款'},
             {id: '2', name: 'B款'}
           ]
-          this.requestFormList.push(formObj)
+          this.requestFormList.push(this.pushFormList('SELECT','商品型号',key,option,record,options))
         }
         if (key === 'size') {
-          formObj.type = 'SELECT';
-          formObj.label = '商品尺码';
-          formObj.field = key;
-          formObj.disabled = true;
-          formObj.initialValue = record[key];
-          formObj.list = [
+          let options = [
             {id: '1', name: 'S'},
             {id: '2', name: 'M'},
             {id: '3', name: 'L'},
@@ -154,15 +230,10 @@ class List extends Component {
             {id: '5', name: 'XXL'},
             {id: '6', name: 'XXXL'},
           ]
-          this.requestFormList.push(formObj)
+          this.requestFormList.push(this.pushFormList('SELECT','商品尺码',key,option,record,options))
         }
         if (key === 'stock') {
-          formObj.type = 'INPUT';
-          formObj.label = '商品现有库存';
-          formObj.field = key;
-          formObj.disabled = true;
-          formObj.initialValue = record[key];
-          this.requestFormList.push(formObj)
+          this.requestFormList.push(this.pushFormList('INPUT','商品现有库存',key,option,record))
         }
       }
 
@@ -264,7 +335,7 @@ class List extends Component {
             width: 100,
             align: 'center',
             render: ( text, item ) => {
-              return <span><Button size="small" onClick={ () => { this.showModal(item) }}>修改</Button><Button size="small" onClick={ () => { this.showModal(item) }}>入库</Button></span>
+              return <span><Button size="small" onClick={ () => { this.showModal('edit',item) }}>修改</Button><Button size="small" onClick={ () => { this.showModal('stock',item) }}>入库</Button></span>
             }
           },
         ]
@@ -274,7 +345,7 @@ class List extends Component {
                     <BaseForm formList={this.FormList} key={this.FormList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card className="table_data">
-                    <Button type="primary">添加商品</Button>
+                    <Button type="primary" onClick={ () => { this.showModal() }} >添加商品</Button>
                     <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1250, y: 500 }}/>
                 </Card>
                 <Modal title="添加库存" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>

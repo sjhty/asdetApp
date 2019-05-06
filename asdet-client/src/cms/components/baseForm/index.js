@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Form, Input, Select, DatePicker, Button } from 'antd'
-import Moment from 'moment'
 import Utils from '../../../utils'
 const FormItem = Form.Item
 
@@ -8,15 +7,6 @@ class BaseForm extends Component {
 
     handleFilterSubmit = () => {
         let fieldsValue = this.props.form.getFieldsValue();
-        if (fieldsValue.begin_time) {
-            fieldsValue.begin_time = Moment(fieldsValue.begin_time).format('YYYY-MM-DD HH:mm:ss');
-        }
-        if (fieldsValue.end_time) {
-            fieldsValue.end_time = Moment(fieldsValue.end_time).format('YYYY-MM-DD HH:mm:ss');
-        }
-        if (fieldsValue.newStock) {
-            fieldsValue.stock = Number(fieldsValue.newStock) + Number(fieldsValue.stock);
-        }
         console.log(fieldsValue)
         this.props.filterSubmit(fieldsValue);
     }
