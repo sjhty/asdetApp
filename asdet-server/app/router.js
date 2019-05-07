@@ -15,4 +15,7 @@ module.exports = app => {
 
     //category
     router.get('/asdet/api/category/search', controller.category.findAllList);
+
+    //upload
+    router.post('/asdet/api/upload', controller.upload.upload);
 };

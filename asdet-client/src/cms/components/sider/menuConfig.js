@@ -22,6 +22,11 @@ const menuList = [
         icon: 'barcode',
         children: [
             {
+                title: '添加商品',
+                url: '/manage/products/add',
+                icon: ''
+            },
+            {
                 title: '商品列表',
                 url: '/manage/products/list',
                 icon: ''

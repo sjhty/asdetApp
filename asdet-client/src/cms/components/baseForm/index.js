@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, DatePicker, Button } from 'antd'
+import { Form, Input, Select, DatePicker, Button, Upload, Icon } from 'antd'
 import Utils from '../../../utils'
 const FormItem = Form.Item
 
@@ -9,6 +9,14 @@ class BaseForm extends Component {
         let fieldsValue = this.props.form.getFieldsValue();
         console.log(fieldsValue)
         this.props.filterSubmit(fieldsValue);
+    }
+
+    normFile = (e) => {
+        //console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     }
 
     initFormList = () => {
@@ -21,7 +29,7 @@ class BaseForm extends Component {
                 let field = item.field;
                 let label = item.label;
                 let placeholder = item.placeholder;
-                let initialValue = item.initialValue || '' || '0';
+                let initialValue = item.initialValue || '';
                 let width = item.width;
                 let mode = item.mode;
                 let disabled = item.disabled;
@@ -76,6 +84,22 @@ class BaseForm extends Component {
                         <Button className={resetBtnShow}>重置</Button>
                     </FormItem>
                     formItemList.push(BUTTON);
+                } else if (type === 'UPLOAD') {
+                    const UPLOAD = <FormItem key={field} label={label}>
+                        {
+                            getFieldDecorator(field, {
+                                valuePropName: 'fileList',
+                                getValueFromEvent: this.normFile
+                            })(
+                                <Upload name="logo" action="http://127.0.0.1:7001/asdet/api/upload" listType="picture">
+                                    <Button>
+                                        <Icon type="upload" /> 点击上传
+                                    </Button>
+                                </Upload>
+                            )
+                        }
+                    </FormItem>
+                    formItemList.push(UPLOAD);
                 }
             });
         }

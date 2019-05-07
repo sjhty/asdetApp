@@ -10,95 +10,47 @@ class List extends Component {
     state = {
       params: {},
       visible: false,
+      productTypeList: [
+          {id: '1', name: 'A款'},
+          {id: '2', name: 'B款'}
+      ],
+      sizeList: [
+        {id: '1', name: 'S'},
+        {id: '2', name: 'M'},
+        {id: '3', name: 'L'},
+        {id: '4', name: 'XL'},
+        {id: '5', name: 'XXL'},
+        {id: '6', name: 'XXXL'},
+      ]
     }
-    requestFormList = [
-      {
-          type: 'INPUT',
-          label: '商品名称',
-          field: 'name',
-          placeholder: '请输入商品名称',
-          width: 300
-      },
-      {
-          type: 'SELECT',
-          label: '商品型号',
-          field: 'productType',
-          placeholder: '全部',
-          initialValue: '0',
-          width: 300,
-          list: [
-              {id: '1', name: 'A款'},
-              {id: '2', name: 'B款'}
-          ]
-      },
-      {
-          type: 'SELECT',
-          label: '商品尺码',
-          field: 'size',
-          placeholder: '全部',
-          initialValue: '0',
-          width: 300,
-          list: [
-            {id: '1', name: 'S'},
-            {id: '2', name: 'M'},
-            {id: '3', name: 'L'},
-            {id: '4', name: 'XL'},
-            {id: '5', name: 'XXL'},
-            {id: '6', name: 'XXXL'},
-          ]
-      },
-      
-    ]
-    FormList = [
-        {
-            type: 'INPUT',
-            label: '商品名称',
-            field: 'name',
-            placeholder: '请输入商品名称',
-            width: 180
-        },
-        {
-            type: 'SELECT',
-            label: '商品型号',
-            field: 'productType',
-            placeholder: '全部',
-            initialValue: '0',
-            width: 150,
-            list: [
-                {id: '1', name: 'A款'},
-                {id: '2', name: 'B款'}
-            ]
-        },
-        {
-            type: 'SELECT',
-            label: '商品尺码',
-            field: 'size',
-            placeholder: '全部',
-            initialValue: '0',
-            width: 150,
-            list: [
-              {id: '1', name: 'S'},
-              {id: '2', name: 'M'},
-              {id: '3', name: 'L'},
-              {id: '4', name: 'XL'},
-              {id: '5', name: 'XXL'},
-              {id: '6', name: 'XXXL'},
-            ]
-        },
-        {
-            type: 'TIME_SELECT'
-        },
-        {
-            type: 'BUTTON',
-            label: '查询'
-        }
-    ];
-    
+
     componentDidMount() {
       this.getProductList();
       this.getCategoryList();
     }
 
+    AddFormList = [
+      {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 300},
+      {type: 'SELECT',label: '商品分类',field: 'category_id',placeholder: '全部',initialValue: '0',width: 300,list: this.state.categoryList},
+      {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 300,list: this.state.productTypeList},
+      {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 300,list: this.state.sizeList},
+      {type: 'INPUT',label: '商品颜色',field: 'color',placeholder: '请输入商品颜色',width: 300},
+      {type: 'UPLOAD',label: '上传图片',field: 'imgUrl'},
+      {type: 'INPUT',label: '入库数量',field: 'stock',placeholder: '请输入入库数量',width: 300},
+      {type: 'BUTTON',label: '添加入库',resetBtn: 'hide',className: 'modal_form_btn'}
+    ]
+    FormList = [
+      {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 180},
+      {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 150,list: this.state.productTypeList},
+      {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 150,list: this.state.sizeList},
+      {type: 'TIME_SELECT'},
+      {type: 'BUTTON',label: '查询'}
+    ];
+    requestFormList = []
+
+    /**
+     * 获取商品列表
+     */
     getProductList = () => { 
       ProductApi.getCountAndProducts(this.state.params)
       .then((res) => {
@@ -113,6 +65,9 @@ class List extends Component {
       })
     }
 
+    /**
+     * 获取分类列表
+     */
     getCategoryList = () => { 
       CategoryApi.getCategoryList()
       .then((res) => {
@@ -125,18 +80,18 @@ class List extends Component {
             }
             list.push(obj)
         })
-        this.requestFormList.push({
-            type: 'SELECT',
-            label: '商品分类',
-            field: 'category_id',
-            placeholder: '全部',
-            initialValue: '0',
-            width: 300,
-            list: list
+        this.setState({
+            categoryList: list
         })
       }).catch((err) => {
         console.log(err)
       })
+    }
+
+    setFieldToOption = (option) => {
+      if (option === 'add') {
+        
+      }
     }
 
     handleFilter = (params) => {
@@ -152,6 +107,14 @@ class List extends Component {
 
     handleFilterUpdate = (params) => {
       params.stock = params.newStock ? Number(params.newStock) + Number(params.stock) : Number(params.stock);
+      let url = '';
+      if (params.imgUrl) {
+        params.imgUrl.map( (item, index) => {
+          url += item.response.url + ','
+        })
+        params.imgUrl = url.substring(0,url.length - 1);
+      }
+
       this.state.params = params;
       ProductApi.updateProduct(this.state.params)
         .then( (res) => {
@@ -199,58 +162,60 @@ class List extends Component {
     }
 
     showModal = (option,record) => {
-      if (option) {
-        this.requestFormList = [];
-      }
-      
+
       this.setState({
         visible: true,
       });
+      if (option) {
+        this.requestFormList = [];
+        for (const key in record) {
+          if (key === 'id') {
+            this.requestFormList.push(this.pushFormList('INPUT','商品编号',key,option,record))
+          }
+          if (key === 'name') {
+            this.requestFormList.push(this.pushFormList('INPUT','商品名称',key,option,record))
+          }
+          if (key === 'productType') {
+            let options = [
+              {id: '1', name: 'A款'},
+              {id: '2', name: 'B款'}
+            ]
+            this.requestFormList.push(this.pushFormList('SELECT','商品型号',key,option,record,options))
+          }
+          if (key === 'size') {
+            let options = [
+              {id: '1', name: 'S'},
+              {id: '2', name: 'M'},
+              {id: '3', name: 'L'},
+              {id: '4', name: 'XL'},
+              {id: '5', name: 'XXL'},
+              {id: '6', name: 'XXXL'},
+            ]
+            this.requestFormList.push(this.pushFormList('SELECT','商品尺码',key,option,record,options))
+          }
+          if (key === 'stock') {
+            this.requestFormList.push(this.pushFormList('INPUT','商品现有库存',key,option,record))
+          }
+        }
 
-      for (const key in record) {
-        if (key === 'id') {
-          this.requestFormList.push(this.pushFormList('INPUT','商品编号',key,option,record))
-        }
-        if (key === 'name') {
-          this.requestFormList.push(this.pushFormList('INPUT','商品名称',key,option,record))
-        }
-        if (key === 'productType') {
-          let options = [
-            {id: '1', name: 'A款'},
-            {id: '2', name: 'B款'}
-          ]
-          this.requestFormList.push(this.pushFormList('SELECT','商品型号',key,option,record,options))
-        }
-        if (key === 'size') {
-          let options = [
-            {id: '1', name: 'S'},
-            {id: '2', name: 'M'},
-            {id: '3', name: 'L'},
-            {id: '4', name: 'XL'},
-            {id: '5', name: 'XXL'},
-            {id: '6', name: 'XXXL'},
-          ]
-          this.requestFormList.push(this.pushFormList('SELECT','商品尺码',key,option,record,options))
-        }
-        if (key === 'stock') {
-          this.requestFormList.push(this.pushFormList('INPUT','商品现有库存',key,option,record))
-        }
+        this.requestFormList.push({
+            type: 'INPUT',
+            label: '入库数量',
+            field: 'newStock',
+            placeholder: '请输入入库数量',
+            width: 300
+        },{
+            type: 'BUTTON',
+            label: '添加入库',
+            resetBtn: 'hide',
+            className: 'modal_form_btn' 
+        })
+      } else {
+        this.requestFormList = [];
+        this.requestFormList = this.AddFormList;
       }
 
-      this.requestFormList.push({
-          type: 'INPUT',
-          label: '入库数量',
-          field: 'newStock',
-          placeholder: '请输入入库数量',
-          width: 300
-      },{
-          type: 'BUTTON',
-          label: '添加入库',
-          resetBtn: 'hide',
-          className: 'modal_form_btn' 
-      })
-
-      console.log(this.requestFormList)
+      console.log(this.AddFormList)
     }
 
     handleOk = (e) => {
@@ -269,6 +234,16 @@ class List extends Component {
         const columns = [
           {
             title: '商品名称', width: 150, dataIndex: 'name', key: 'name', fixed: 'left', align: 'center',
+          },
+          {
+            title: '商品图片', dataIndex: 'imgUrl', key: 'imgUrl', width: 150, align: 'center',
+            render: (text) => {
+              if (text !== '' && text !== 'null') {
+                return <img src={text} className="table_img"/>
+              } else {
+                return ''
+              }
+            }
           },
           {
             title: '商品分类', width: 150, dataIndex: 'category.name', key: 'category.name', align: 'center',
@@ -346,7 +321,7 @@ class List extends Component {
                 </Card>
                 <Card className="table_data">
                     <Button type="primary" onClick={ () => { this.showModal() }} >添加商品</Button>
-                    <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1250, y: 500 }}/>
+                    <Table columns={columns} dataSource={this.state.data} scroll={{ x: 1400, y: 500 }}/>
                 </Card>
                 <Modal title="添加库存" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>
                     <BaseForm formList={this.requestFormList} key={this.requestFormList} filterSubmit={this.handleFilterUpdate}/>

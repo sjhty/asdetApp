@@ -36,11 +36,21 @@ class ProductController extends Controller {
      */
     async updateProduct() {
         const { ctx } = this;
-
-        const id = ctx.request.body.id;
-
-        ctx.body = await ctx.service.products.updateProduct(id,ctx.request.body);
-
+        const { id, name, category_id, color, productType, size, imgUrl, stock } = ctx.request.body;
+        if (id) {
+            ctx.body = await ctx.service.products.updateProduct(id,ctx.request.body);
+        } else {
+            let newProduct = {
+                name: name,
+                category_id: category_id,
+                color: color,
+                productType: productType,
+                size: size,
+                imgUrl: imgUrl,
+                stock: stock
+            }
+            ctx.body = await ctx.service.products.addProduct(newProduct);
+        }
     }
 
     /**

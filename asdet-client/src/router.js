@@ -4,6 +4,7 @@ import App from './App'
 import Manage from './cms'
 import Home from './cms/pages/home'
 import UserList from './cms/pages/user/list'
+import AddProduct from './cms/pages/product/add'
 import ProductList from './cms/pages/product/list'
 import ProductCategory from './cms/pages/product/category'
 import Cart from './cms/pages/order/cart'
@@ -17,6 +18,7 @@ class Routers extends Component {
                         <Manage>
                             <Route path="/manage/home" component={Home}/>
                             <Route path="/manage/users/list" component={UserList}/>
+                            <Route path="/manage/products/add" component={AddProduct}/>
                             <Route path="/manage/products/list" component={ProductList}/>
                             <Route path="/manage/products/category" component={ProductCategory}/>
                             <Route path="/manage/orders/cart" component={Cart}/>

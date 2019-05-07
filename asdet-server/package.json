@@ -7,12 +7,17 @@
     "declarations": true
   },
   "dependencies": {
+    "await-stream-ready": "^1.0.1",
     "egg": "^2.15.1",
     "egg-cors": "^2.2.0",
+    "egg-multipart": "^2.5.0",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^4.3.1",
+    "jm-mkdirs": "0.0.1",
+    "md5": "^2.2.1",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.2.15"
+    "sequelize": "^5.2.15",
+    "stream-wormhole": "^1.1.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
