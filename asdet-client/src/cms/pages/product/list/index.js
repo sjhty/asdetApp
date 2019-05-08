@@ -24,12 +24,12 @@ class List extends Component {
         {id: '6', name: 'XXXL'},
       ],
       colorList: [
-        {id: '黑色', name: '黑色'},
-        {id: '红色', name: '红色'},
-        {id: '蓝色', name: '蓝色'},
-        {id: '灰色', name: '灰色'},
-        {id: '肤色', name: '肤色'},
-        {id: '粉色', name: '粉色'},
+        {id: '1', name: '黑色'},
+        {id: '2', name: '红色'},
+        {id: '3', name: '蓝色'},
+        {id: '4', name: '灰色'},
+        {id: '5', name: '肤色'},
+        {id: '6', name: '粉色'},
       ]
     }
 
@@ -112,7 +112,7 @@ class List extends Component {
                 item.list = this.state.categoryList
               }
               if (item.field === 'color') {
-                item.defaultValue = record[key].split(',')
+                item.initialValue = record[key].split(',')
               }
               if (item.type === 'SPAN') {
                 let urlList = record[key].split(',')
@@ -126,6 +126,9 @@ class List extends Component {
               }
               if (option === 'edit') {
                 item.isEdit = false;
+                if (item.field === 'id') {
+                  item.isEdit = true;
+                }
                 if (item.field !== 'newStock' && item.field !== 'stock' && item.type !== 'UPLOAD') {
                   newFieldList.push(item);
                 }

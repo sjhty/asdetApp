@@ -59,8 +59,7 @@ class BaseForm extends Component {
                     const SELECT = <FormItem label={label} key={field}>
                         {
                             getFieldDecorator(field,{
-                                initialValue: initialValue,
-                                defaultValue: defaultValue
+                                initialValue: initialValue
                             })(
                                 <Select style={{width:width}} key={field} mode={mode} disabled={disabled}>
                                 {
