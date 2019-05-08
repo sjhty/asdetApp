@@ -32,7 +32,7 @@ module.exports = {
         } 
         if (begin_time === null && end_time !== null) {
             whereObj['$products.created_at$'] = {
-                [Op.gte]: end_time
+                [Op.lte]: end_time
             }
         }
 

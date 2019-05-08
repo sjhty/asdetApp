@@ -32,9 +32,10 @@ class BaseForm extends Component {
                 let initialValue = item.initialValue || '';
                 let width = item.width;
                 let mode = item.mode;
-                let disabled = item.disabled;
+                let disabled = item.isEdit;
                 let btnClass = item.className;
                 let resetBtnShow = item.resetBtn;
+                let defaultValue = item.defaultValue;
 
                 if (type === 'INPUT') {
                     const INPUT = <FormItem label={label} key={field}>
@@ -47,13 +48,21 @@ class BaseForm extends Component {
                         }
                     </FormItem>
                     formItemList.push(INPUT);
+                } else if (type === 'SPAN') {
+                    const SPAN = <FormItem label={label} key={field}>
+                        {
+                            <span className="ant-form-text" dangerouslySetInnerHTML={{__html: initialValue}}></span>
+                        }
+                    </FormItem>
+                    formItemList.push(SPAN);
                 } else if (type === 'SELECT') {
                     const SELECT = <FormItem label={label} key={field}>
                         {
                             getFieldDecorator(field,{
-                                initialValue: initialValue
+                                initialValue: initialValue,
+                                defaultValue: defaultValue
                             })(
-                                <Select style={{width:width}} key={i} mode={mode} disabled={disabled}>
+                                <Select style={{width:width}} key={field} mode={mode} disabled={disabled}>
                                 {
                                     Utils.getOptionList(item.list)
                                 }  
@@ -91,7 +100,7 @@ class BaseForm extends Component {
                                 valuePropName: 'fileList',
                                 getValueFromEvent: this.normFile
                             })(
-                                <Upload name="logo" action="http://127.0.0.1:7001/asdet/api/upload" listType="picture">
+                                <Upload name="logo" action="http://127.0.0.1:7001/asdet/api/upload" listType="picture" disabled={disabled}> 
                                     <Button>
                                         <Icon type="upload" /> 点击上传
                                     </Button>

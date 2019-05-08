@@ -9,7 +9,7 @@ export default {
      */
     getOptionList(data) {
         if (data) {
-            const Options = [<Option value='0' key='0'>全部</Option>];
+            const Options = [<Option value='0' key='0'>请选择</Option>];
             data.map((item) => {
                 Options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
             })

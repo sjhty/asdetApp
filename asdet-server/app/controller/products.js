@@ -5,13 +5,17 @@ class ProductController extends Controller {
     async addProduct() {
         const { ctx } = this;
 
-        const { name, category_id, attribute, imgUrl, stock } = ctx.request.body;
+        const { name, category_id, attribute, imgUrl, stock, color, productType, size } = ctx.request.body;
+        
         let newProduct = {
             name: name,
             category_id: category_id,
             attribute: attribute,
             imgUrl: imgUrl,
-            stock: stock
+            stock: stock,
+            color: color.join(","),
+            productType: productType,
+            size: size
         }
 
         ctx.body = await ctx.service.products.addProduct(newProduct);
@@ -37,18 +41,18 @@ class ProductController extends Controller {
     async updateProduct() {
         const { ctx } = this;
         const { id, name, category_id, color, productType, size, imgUrl, stock } = ctx.request.body;
+        const newProduct = {
+            name: name,
+            category_id: category_id,
+            color: color.join(","),
+            productType: productType,
+            size: size,
+            imgUrl: imgUrl,
+            stock: stock
+        }
         if (id) {
-            ctx.body = await ctx.service.products.updateProduct(id,ctx.request.body);
+            ctx.body = await ctx.service.products.updateProduct(id,newProduct);
         } else {
-            let newProduct = {
-                name: name,
-                category_id: category_id,
-                color: color,
-                productType: productType,
-                size: size,
-                imgUrl: imgUrl,
-                stock: stock
-            }
             ctx.body = await ctx.service.products.addProduct(newProduct);
         }
     }

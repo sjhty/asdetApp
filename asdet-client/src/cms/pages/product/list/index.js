@@ -10,6 +10,7 @@ class List extends Component {
     state = {
       params: {},
       visible: false,
+      categoryList: [],
       productTypeList: [
           {id: '1', name: 'A款'},
           {id: '2', name: 'B款'}
@@ -21,6 +22,14 @@ class List extends Component {
         {id: '4', name: 'XL'},
         {id: '5', name: 'XXL'},
         {id: '6', name: 'XXXL'},
+      ],
+      colorList: [
+        {id: '黑色', name: '黑色'},
+        {id: '红色', name: '红色'},
+        {id: '蓝色', name: '蓝色'},
+        {id: '灰色', name: '灰色'},
+        {id: '肤色', name: '肤色'},
+        {id: '粉色', name: '粉色'},
       ]
     }
 
@@ -30,16 +39,19 @@ class List extends Component {
     }
 
     AddFormList = [
+      {type: 'INPUT',label: '商品编号',field: 'id',placeholder: '请输入商品编号',width: 300},
       {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 300},
-      {type: 'SELECT',label: '商品分类',field: 'category_id',placeholder: '全部',initialValue: '0',width: 300,list: this.state.categoryList},
+      {type: 'SELECT',label: '商品分类',field: 'category_id',placeholder: '全部',initialValue: '0',width: 300,list: []},
       {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 300,list: this.state.productTypeList},
       {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 300,list: this.state.sizeList},
-      {type: 'INPUT',label: '商品颜色',field: 'color',placeholder: '请输入商品颜色',width: 300},
+      {type: 'SELECT',label: '商品颜色',field: 'color',mode:'tags',placeholder: '请输入商品颜色',width: 300,list: this.state.colorList},
       {type: 'UPLOAD',label: '上传图片',field: 'imgUrl'},
+      {type: 'SPAN',label: '商品图片',field: 'imgUrl'},
+      {type: 'INPUT',label: '现有库存数量',field: 'newStock',placeholder: '请输入现有库存数量',width: 300},
       {type: 'INPUT',label: '入库数量',field: 'stock',placeholder: '请输入入库数量',width: 300},
-      {type: 'BUTTON',label: '添加入库',resetBtn: 'hide',className: 'modal_form_btn'}
+      {type: 'BUTTON',label: '添加入库',className: 'modal_form_btn'}
     ]
-    FormList = [
+    searchFormList = [
       {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 180},
       {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 150,list: this.state.productTypeList},
       {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 150,list: this.state.sizeList},
@@ -51,18 +63,18 @@ class List extends Component {
     /**
      * 获取商品列表
      */
-    getProductList = () => { 
-      ProductApi.getCountAndProducts(this.state.params)
-      .then((res) => {
-        res.data.map((item, index) => {
-            item.key = index;
+    getProductList = (params) => { 
+      ProductApi.getCountAndProducts(params)
+        .then((res) => {
+          res.data.map((item, index) => {
+              item.key = index;
+          })
+          this.setState({
+            data: res.data
+          })
+        }).catch((err) => {
+          console.log(err)
         })
-        this.setState({
-          data: res.data
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
     }
 
     /**
@@ -88,10 +100,75 @@ class List extends Component {
       })
     }
 
-    setFieldToOption = (option) => {
-      if (option === 'add') {
-        
+    //根据操作按钮显示商品列表页表单组合
+    setFieldToOption = (option, record) => {
+      let fieldList = this.AddFormList;
+      let newFieldList = [];
+      if (option && record) {
+        fieldList.map( (item, index) => {
+          for (const key in record) {
+            if (key === item.field) {
+              if (item.field === 'category_id') {
+                item.list = this.state.categoryList
+              }
+              if (item.field === 'color') {
+                item.defaultValue = record[key].split(',')
+              }
+              if (item.type === 'SPAN') {
+                let urlList = record[key].split(',')
+                let imgUrl = '';
+                urlList.map( (item, index) => {
+                  imgUrl += '<img src='+ item +' style="width:50px;height:50px;"/>'
+                })
+                item.initialValue = imgUrl
+              } else {
+                item.initialValue = record[key];
+              }
+              if (option === 'edit') {
+                item.isEdit = false;
+                if (item.field !== 'newStock' && item.field !== 'stock' && item.type !== 'UPLOAD') {
+                  newFieldList.push(item);
+                }
+                
+              } else if (option === 'edit_stock' && item.type !== 'UPLOAD') {
+                if (item.field !== 'stock') {
+                  item.isEdit = true;
+                }
+                newFieldList.push(item);
+              }
+            }
+            
+          }
+
+          if ( item.type === 'BUTTON' ) {
+            item.resetBtn = 'hide';
+            if (option === 'edit') {
+              item.label = '修改'
+            } else if (option === 'edit_stock') {
+              item.label = '入库'
+            }
+            newFieldList.push(item);
+          }
+        })
+      } else {
+        fieldList.map( (item, index) => {
+          if (item.type === 'SELECT') {
+            item.initialValue = '0'
+          } else {
+            item.initialValue = ''
+          }
+          if (item.type === 'BUTTON') {
+            item.label = '添加入库'
+          }
+          if (item.field === 'category_id') {
+            item.list = this.state.categoryList
+          }
+          if (item.field !== 'newStock' && item.type !== 'SPAN' && item.field !== 'id') {
+            newFieldList.push(item)
+          }
+        })
       }
+      this.requestFormList = newFieldList;
     }
 
     handleFilter = (params) => {
@@ -101,8 +178,7 @@ class List extends Component {
       if (params.end_time) {
         params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
       }
-      this.state.params = params;
-      this.getProductList();
+      this.getProductList(params);
     }
 
     handleFilterUpdate = (params) => {
@@ -115,17 +191,28 @@ class List extends Component {
         params.imgUrl = url.substring(0,url.length - 1);
       }
 
-      this.state.params = params;
-      ProductApi.updateProduct(this.state.params)
+      ProductApi.updateProduct(params)
         .then( (res) => {
           if (res.success === true) {
             this.setState({
               visible: false,
             });
-            notification['success']({
-              message: '商品入库成功',
-              description: '新入库商品【'+this.state.params.newStock+'】件，现有库存【'+res.data.stock+'】件',
-            });
+            if (this.state.option === 'edit') {
+              notification['success']({
+                message: '商品信息修改成功',
+                description: '商品信息修改成功',
+              });
+            } else if (this.state.option === 'edit_stock') {
+              notification['success']({
+                message: '商品入库成功',
+                description: '商品入库成功',
+              });
+            } else {
+              notification['success']({
+                message: '商品添加成功',
+                description: '商品添加成功',
+              });
+            }
             this.getProductList();
           } else {
             alert('修改失败');
@@ -135,87 +222,13 @@ class List extends Component {
         })
     }
 
-    pushFormList(type,label,key,option,data,list) {
-      let isEdit = true,initValue = '';
-      if (option === 'edit') {
-        isEdit = false;
-        initValue = data[key]
-      } else if (option === 'stock') {
-        initValue = data[key]
-      } else {
-        isEdit = false;
-      }
-      let formObj = {
-          type: type,
-          label: label,
-          field: key,
-          width: 300,
-          disabled: isEdit,
-          initialValue: initValue
-      }
-
-      if (type === 'SELECT') {
-        formObj.list = list
-      }
-
-      return formObj;
-    }
-
+    //显示modal表单弹框
     showModal = (option,record) => {
-
       this.setState({
         visible: true,
+        option
       });
-      if (option) {
-        this.requestFormList = [];
-        for (const key in record) {
-          if (key === 'id') {
-            this.requestFormList.push(this.pushFormList('INPUT','商品编号',key,option,record))
-          }
-          if (key === 'name') {
-            this.requestFormList.push(this.pushFormList('INPUT','商品名称',key,option,record))
-          }
-          if (key === 'productType') {
-            let options = [
-              {id: '1', name: 'A款'},
-              {id: '2', name: 'B款'}
-            ]
-            this.requestFormList.push(this.pushFormList('SELECT','商品型号',key,option,record,options))
-          }
-          if (key === 'size') {
-            let options = [
-              {id: '1', name: 'S'},
-              {id: '2', name: 'M'},
-              {id: '3', name: 'L'},
-              {id: '4', name: 'XL'},
-              {id: '5', name: 'XXL'},
-              {id: '6', name: 'XXXL'},
-            ]
-            this.requestFormList.push(this.pushFormList('SELECT','商品尺码',key,option,record,options))
-          }
-          if (key === 'stock') {
-            this.requestFormList.push(this.pushFormList('INPUT','商品现有库存',key,option,record))
-          }
-        }
-
-        this.requestFormList.push({
-            type: 'INPUT',
-            label: '入库数量',
-            field: 'newStock',
-            placeholder: '请输入入库数量',
-            width: 300
-        },{
-            type: 'BUTTON',
-            label: '添加入库',
-            resetBtn: 'hide',
-            className: 'modal_form_btn' 
-        })
-      } else {
-        this.requestFormList = [];
-        this.requestFormList = this.AddFormList;
-      }
-
-      console.log(this.AddFormList)
+      this.setFieldToOption(option, record);
     }
 
     handleOk = (e) => {
@@ -239,7 +252,11 @@ class List extends Component {
             title: '商品图片', dataIndex: 'imgUrl', key: 'imgUrl', width: 150, align: 'center',
             render: (text) => {
               if (text !== '' && text !== 'null') {
-                return <img src={text} className="table_img"/>
+                let urls = '',urlArr = (text || "").split(',');
+                urlArr.map( (item, index) => {
+                  urls += '<img src='+item+' class="table_img" alt='+item+'/>'
+                })
+                return <span dangerouslySetInnerHTML={{__html: urls}}></span>
               } else {
                 return ''
               }
@@ -310,14 +327,14 @@ class List extends Component {
             width: 100,
             align: 'center',
             render: ( text, item ) => {
-              return <span><Button size="small" onClick={ () => { this.showModal('edit',item) }}>修改</Button><Button size="small" onClick={ () => { this.showModal('stock',item) }}>入库</Button></span>
+              return <span><Button size="small" onClick={ () => { this.showModal('edit',item) }}>修改</Button><Button size="small" onClick={ () => { this.showModal('edit_stock',item) }}>入库</Button></span>
             }
           },
         ]
         return (
             <div>
                 <Card className="search_condition">
-                    <BaseForm formList={this.FormList} key={this.FormList} filterSubmit={this.handleFilter}/>
+                    <BaseForm formList={this.searchFormList} key={this.searchFormList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card className="table_data">
                     <Button type="primary" onClick={ () => { this.showModal() }} >添加商品</Button>
