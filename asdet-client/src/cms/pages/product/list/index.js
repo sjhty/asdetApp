@@ -111,7 +111,7 @@ class List extends Component {
               if (item.field === 'category_id') {
                 item.list = this.state.categoryList
               }
-              if (item.field === 'color') {
+              if (item.field === 'color' && record[key]) {
                 item.initialValue = record[key].split(',')
               }
               if (item.type === 'SPAN') {
@@ -270,6 +270,17 @@ class List extends Component {
           },
           {
             title: '商品颜色', dataIndex: 'color', key: 'color', width: 100, align: 'center',
+            render: (text) => {
+              let str = '';
+              (text || "").split(',').map( (temp ,i) =>{
+                this.state.colorList.map( (item, index) => {
+                  if (item.id === temp) {
+                    str += item.name + ' ';
+                  }
+                })
+              })
+              return str;
+            }
           },
           {
             title: '商品型号', dataIndex: 'productType', key: 'productType', width: 100, align: 'center',
