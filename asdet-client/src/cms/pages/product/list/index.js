@@ -4,6 +4,7 @@ import Moment from 'moment'
 import BaseForm from '../../../components/baseForm'
 import ProductApi from '../../../../axios/api/productsApi'
 import CategoryApi from '../../../../axios/api/categoryApi'
+import Utils from '../../../../utils'
 import '../list/index.less'
 
 class List extends Component {
@@ -112,10 +113,10 @@ class List extends Component {
                 item.list = this.state.categoryList
               }
               if (item.field === 'color' && record[key]) {
-                item.initialValue = record[key].split(',')
+                item.initialValue = (record[key] || "").split(',')
               }
               if (item.type === 'SPAN') {
-                let urlList = record[key].split(',')
+                let urlList = (record[key] || "").split(',')
                 let imgUrl = '';
                 urlList.map( (item, index) => {
                   imgUrl += '<img src='+ item +' style="width:50px;height:50px;"/>'
@@ -285,30 +286,13 @@ class List extends Component {
           {
             title: '商品型号', dataIndex: 'productType', key: 'productType', width: 100, align: 'center',
             render: (text) => {
-
-              if (text === '1') {
-                  return 'A款';
-              } else {
-                  return 'B款';
-              }
+              return Utils.formateAttribute(text,this.state.productTypeList)
             },
           },
           {
             title: '商品尺码', dataIndex: 'size', key: 'size', width: 100, align: 'center',
             render: (text) => {
-              if (text === '1') {
-                  return 'S'
-              } else if (text === '2'){
-                  return 'M'
-              } else if (text === '3'){
-                  return 'L'
-              } else if (text === '4'){
-                  return 'XL'
-              } else if (text === '5'){
-                  return 'XXL'
-              } else if (text === '6'){
-                  return 'XXXL'
-              }
+              return Utils.formateAttribute(text,this.state.sizeList)
             }
           },
           {

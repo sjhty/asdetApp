@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, Table } from 'antd'
 import BaseForm from '../../../components/baseForm'
 import ProductsApi from '../../../../axios/api/productsApi'
+import Utile from '../../../../utils'
 
 class Cart extends Component {
     state = {}
@@ -9,6 +10,36 @@ class Cart extends Component {
     componentWillMount() {
         this.getProductData()
     }
+
+    levelList = [
+        {id: '1', name: '顾客'},
+        {id: '2', name: '部长'},
+        {id: '3', name: '理事'},
+        {id: '4', name: '社长'}
+    ]
+
+    typeList = [
+        {id: '1', name: 'A款'},
+        {id: '2', name: 'B款'}
+    ]
+
+    sizeList = [
+        {id: '1', name: 'S'},
+        {id: '2', name: 'M'},
+        {id: '3', name: 'L'},
+        {id: '4', name: 'XL'},
+        {id: '5', name: 'XXL'},
+        {id: '6', name: 'XXXL'}
+    ]
+
+    colorList = [
+        {id: '1', name: '黑色'},
+        {id: '2', name: '红色'},
+        {id: '3', name: '蓝色'},
+        {id: '4', name: '灰色'},
+        {id: '5', name: '肤色'},
+        {id: '6', name: '粉色'},
+    ]
 
     orderInfoList = [
         {
@@ -25,12 +56,7 @@ class Cart extends Component {
             placeholder: '全部',
             initialValue: '0',
             width: 80,
-            list: [
-                {id: '1', name: '顾客'},
-                {id: '2', name: '部长'},
-                {id: '3', name: '理事'},
-                {id: '4', name: '社长'}
-            ]
+            list: this.levelList
         },
         {
             type: 'INPUT',
@@ -56,14 +82,11 @@ class Cart extends Component {
         {
             type: 'SELECT',
             label: '款式',
-            field: 'style',
+            field: 'productType',
             placeholder: '全部',
             initialValue: '0',
             width: 80,
-            list: [
-                {id: '1', name: 'A款'},
-                {id: '2', name: 'B款'}
-            ]
+            list: this.typeList
         },
         {
             type: 'SELECT',
@@ -72,14 +95,7 @@ class Cart extends Component {
             placeholder: '全部',
             initialValue: '0',
             width: 80,
-            list: [
-                {id: '1', name: 'S'},
-                {id: '2', name: 'M'},
-                {id: '3', name: 'L'},
-                {id: '4', name: 'XL'},
-                {id: '5', name: 'XXL'},
-                {id: '6', name: 'XXXL'}
-            ]
+            list: this.sizeList
         },
         {
             type: 'BUTTON',
@@ -93,30 +109,16 @@ class Cart extends Component {
     getProductData = () => {
         ProductsApi.getCountAndProducts(this.params)
             .then((res) => {
-                let list = [],type='',size='';
+                let list = [];
                 res.data.map((item, index) => {
-                    if (item.productType === '1') {
-                        type = 'A款'
-                    } else {
-                        type = 'B款'
-                    }
-                    if (item.size === '1') {
-                        size = 'S'
-                    } else if (item.size === '2') {
-                        size = 'M'
-                    } else if (item.size === '3') {
-                        size = 'L'
-                    } else if (item.size === '4') {
-                        size = 'XL'
-                    } else if (item.size === '5') {
-                        size = 'XXL'
-                    } else if (item.size === '6') {
-                        size = 'XXXL'
-                    }
+                    let color = '',type = '',size = '';
+                    color = Utile.formateAttribute(item.color,this.colorList);
+                    type = Utile.formateAttribute(item.productType,this.typeList);
+                    size = Utile.formateAttribute(item.size,this.sizeList);
                     let dataObj = {
                         key: index,
                         name: item.name,
-                        attribute: '【'+item.color+'】,'+type+' '+size,
+                        attribute: '【'+color+'】,'+type+' '+size,
                         stock: item.stock,
                         price: item.category.price,
                         minister_price: item.category.minister_price,

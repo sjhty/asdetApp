@@ -46,5 +46,30 @@ export default {
         } else {
             return str;
         }
+    },
+
+    /**
+     * 渲染表格数据处理
+     */
+    formateAttribute(value,arr) {
+        let result = '';
+        if (value instanceof Array) {
+            value.map( (item) => {
+                arr.map( (option) => {
+                    if (item === option.id) {
+                        result += option.name + ',';
+                    }
+                })
+            })
+        } else {
+            
+            arr.map( (option) => {
+                if (value === option.id) {
+                    result = option.name;
+                }
+            })
+        }
+
+        return result;
     }
 }
