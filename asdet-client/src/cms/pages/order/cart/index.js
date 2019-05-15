@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Button, Modal } from 'antd'
 import BaseForm from '../../../components/baseForm'
 import ProductsApi from '../../../../axios/api/productsApi'
 import Utile from '../../../../utils'
@@ -85,7 +85,7 @@ class Cart extends Component {
             field: 'productType',
             placeholder: '全部',
             initialValue: '0',
-            width: 80,
+            width: 100,
             list: this.typeList
         },
         {
@@ -94,13 +94,26 @@ class Cart extends Component {
             field: 'size',
             placeholder: '全部',
             initialValue: '0',
-            width: 80,
+            width: 100,
             list: this.sizeList
         },
         {
             type: 'BUTTON',
             label: '查询'
         }
+    ]
+
+    AddFormList = [
+        {type: 'INPUT',label: '商品编号',field: 'id',placeholder: '请输入商品编号',width: 300,isEdit: true},
+        {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 300,isEdit: true},
+        {type: 'SELECT',label: '商品分类',field: 'category_id',placeholder: '全部',initialValue: '0',width: 300,list: [],isEdit: true},
+        {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 300,list: this.state.productTypeList,isEdit: true},
+        {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 300,list: this.state.sizeList,isEdit: true},
+        {type: 'SELECT',label: '商品颜色',field: 'color',mode:'tags',placeholder: '请选择颜色',initialValue: '0',width: 300,list: this.state.colorList,isEdit: true},
+        {type: 'SPAN',label: '商品图片',field: 'imgUrl'},
+        {type: 'INPUT',label: '现有库存数量',field: 'newStock',placeholder: '请输入现有库存数量',width: 300,isEdit: true},
+        {type: 'INPUT',label: '下单数量',field: 'stock',placeholder: '请输入下单数量',width: 300},
+        {type: 'BUTTON',label: '添加',className: 'modal_form_btn'}
     ]
     
     /**
@@ -112,7 +125,8 @@ class Cart extends Component {
                 let list = [];
                 res.data.map((item, index) => {
                     let color = '',type = '',size = '';
-                    color = Utile.formateAttribute(item.color,this.colorList);
+                    let new_color = Utile.formateAttribute((item.color || "").split(','),this.colorList)
+                    color = new_color.substr(0,new_color.length - 1)
                     type = Utile.formateAttribute(item.productType,this.typeList);
                     size = Utile.formateAttribute(item.size,this.sizeList);
                     let dataObj = {
@@ -136,6 +150,28 @@ class Cart extends Component {
     handleFilter = (params) => {
         this.params = params;
         this.getProductData();
+    }
+
+
+    //显示modal表单弹框
+    showModal = (option,record) => {
+        this.setState({
+          visible: true,
+          option
+        })
+        
+    }
+  
+    handleOk = (e) => {
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+        });
     }
 
     
@@ -191,7 +227,9 @@ class Cart extends Component {
                 key: 'operation',
                 width: 100,
                 align: 'center',
-                render: () => (<span><a href="###">加入购物车</a></span>),
+                render: ( text, item ) => {
+                    return <span><Button size="small" onClick={ () => { this.showModal('edit',item) }}>加入购物车</Button></span>
+                }
               },
         ]
         return (
@@ -204,6 +242,9 @@ class Cart extends Component {
                     <BaseForm formList={this.productInfoList} key={this.productInfoList} filterSubmit={this.handleFilter}/>
                     <Table columns={productColumns} dataSource={this.state.productData} scroll={{y: 300 }} style={{marginTop: "20px"}}/>
                 </Card>
+                <Modal title="购物车" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>
+                    <BaseForm formList={this.AddFormList} key={this.AddFormList} filterSubmit={this.handleFilterUpdate}/>
+                </Modal>
             </div>
         )
     }
