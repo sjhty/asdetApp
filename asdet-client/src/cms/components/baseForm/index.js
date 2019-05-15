@@ -29,7 +29,7 @@ class BaseForm extends Component {
                 let field = item.field;
                 let label = item.label;
                 let placeholder = item.placeholder;
-                let initialValue = item.initialValue || '';
+                let initialValue = item.initialValue;
                 let width = item.width;
                 let mode = item.mode;
                 let disabled = item.isEdit;
@@ -56,6 +56,11 @@ class BaseForm extends Component {
                     </FormItem>
                     formItemList.push(SPAN);
                 } else if (type === 'SELECT') {
+                    
+                    if (field === 'color') {
+                        initialValue = (initialValue || "").split(',')
+                    }
+                    
                     const SELECT = <FormItem label={label} key={field}>
                         {
                             getFieldDecorator(field,{

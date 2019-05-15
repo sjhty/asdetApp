@@ -45,7 +45,7 @@ class List extends Component {
       {type: 'SELECT',label: '商品分类',field: 'category_id',placeholder: '全部',initialValue: '0',width: 300,list: []},
       {type: 'SELECT',label: '商品型号',field: 'productType',placeholder: '全部',initialValue: '0',width: 300,list: this.state.productTypeList},
       {type: 'SELECT',label: '商品尺码',field: 'size',placeholder: '全部',initialValue: '0',width: 300,list: this.state.sizeList},
-      {type: 'SELECT',label: '商品颜色',field: 'color',mode:'tags',placeholder: '请输入商品颜色',width: 300,list: this.state.colorList},
+      {type: 'SELECT',label: '商品颜色',field: 'color',mode:'tags',placeholder: '请选择颜色',initialValue: '0',width: 300,list: this.state.colorList},
       {type: 'UPLOAD',label: '上传图片',field: 'imgUrl'},
       {type: 'SPAN',label: '商品图片',field: 'imgUrl'},
       {type: 'INPUT',label: '现有库存数量',field: 'newStock',placeholder: '请输入现有库存数量',width: 300},
@@ -64,8 +64,8 @@ class List extends Component {
     /**
      * 获取商品列表
      */
-    getProductList = (params) => { 
-      ProductApi.getCountAndProducts(params)
+    getProductList = () => { 
+      ProductApi.getCountAndProducts(this.state.params)
         .then((res) => {
           res.data.map((item, index) => {
               item.key = index;
@@ -111,9 +111,6 @@ class List extends Component {
             if (key === item.field) {
               if (item.field === 'category_id') {
                 item.list = this.state.categoryList
-              }
-              if (item.field === 'color' && record[key]) {
-                item.initialValue = (record[key] || "").split(',')
               }
               if (item.type === 'SPAN') {
                 let urlList = (record[key] || "").split(',')
@@ -182,7 +179,10 @@ class List extends Component {
       if (params.end_time) {
         params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
       }
-      this.getProductList(params);
+      this.setState({
+        params:params
+      })
+      this.getProductList();
     }
 
     handleFilterUpdate = (params) => {
@@ -217,6 +217,9 @@ class List extends Component {
                 description: '商品添加成功',
               });
             }
+            this.setState({
+              params:{}
+            })
             this.getProductList();
           } else {
             alert('修改失败');
@@ -231,8 +234,9 @@ class List extends Component {
       this.setState({
         visible: true,
         option
-      });
+      })
       this.setFieldToOption(option, record);
+
     }
 
     handleOk = (e) => {
@@ -272,15 +276,8 @@ class List extends Component {
           {
             title: '商品颜色', dataIndex: 'color', key: 'color', width: 100, align: 'center',
             render: (text) => {
-              let str = '';
-              (text || "").split(',').map( (temp ,i) =>{
-                this.state.colorList.map( (item, index) => {
-                  if (item.id === temp) {
-                    str += item.name + ' ';
-                  }
-                })
-              })
-              return str;
+              const new_text = Utils.formateAttribute((text || "").split(','), this.state.colorList)
+              return new_text.substr(0, new_text.length - 1)
             }
           },
           {

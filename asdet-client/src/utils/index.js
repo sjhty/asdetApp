@@ -62,7 +62,6 @@ export default {
                 })
             })
         } else {
-            
             arr.map( (option) => {
                 if (value === option.id) {
                     result = option.name;
