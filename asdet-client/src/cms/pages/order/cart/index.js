@@ -163,6 +163,7 @@ class Cart extends Component {
         } else {
             let total = 0;
             params.totalAmount = Number(params.buy_num) * Number(params.realPrice);
+            //params.stock = Number(params.stock) - Number(params.buy_num);
             if (this.orderData.length > 1) {
                 this.orderData.splice(this.orderData.length - 1, 1);
             }
@@ -178,12 +179,37 @@ class Cart extends Component {
             this.setState({
                 orderData: this.orderData
             })
+
+            this.params = params;
+            this.handleCancel();
         }
-        this.params = params;
-        this.handleCancel();
+        
     }
 
-    setFieldToOption = (record) => {
+    deleteOrder = (index) => {
+        debugger
+        let total = 0;
+        this.orderData.splice(index,1);
+        if (this.orderData.length <= 1) {
+            this.orderData = []
+        } else {
+            this.orderData.splice(this.orderData.length - 1, 1);
+            this.orderData.map( (item) => {
+                total += Number(item.totalAmount)
+            })
+    
+            this.orderData.push({
+                totalAmount: '总计：' + total
+            })
+
+        }
+        this.setState({
+            orderData: this.orderData
+        })
+    }
+
+    setFieldToOption = (option,record) => {
+        //debugger
         let fieldList = this.AddFormList;
         let level = this.formRef.getItemsValue()['level'];
         let newFieldList = [];
@@ -200,28 +226,37 @@ class Cart extends Component {
                     newFieldList.push(item);
                 } 
             }
-            if (item.field === 'realPrice') {
-                if (level === '1') {
-                    item.initialValue = record['price'];
-                } else if (level === '2') {
-                    item.initialValue = record['minister_price'];
-                } else if (level === '3') {
-                    item.initialValue = record['director_price'];
-                } else {
-                    item.initialValue = record['president_price'];
+            if (!option) {
+                if (item.field === 'realPrice') {
+                    if (level === '1') {
+                        item.initialValue = record['price'];
+                    } else if (level === '2') {
+                        item.initialValue = record['minister_price'];
+                    } else if (level === '3') {
+                        item.initialValue = record['director_price'];
+                    } else {
+                        item.initialValue = record['president_price'];
+                    }
+                    newFieldList.push(item);
                 }
-                newFieldList.push(item);
+                if (item.field === 'buy_num' || item.type === 'BUTTON') {
+                    newFieldList.push(item);
+                }
+            } else {
+                if (item.type === 'BUTTON') {
+                    item.label = '修改'
+                    newFieldList.push(item);
+                }
             }
-            if (item.field === 'buy_num' || item.type === 'BUTTON') {
-                newFieldList.push(item);
-            }
+            
+            
           })
         }
         this.requestFormList = newFieldList;
       }
 
     //显示modal表单弹框
-    showModal = (record) => {
+    showModal = (option,record) => {
         if (this.formRef.getItemsValue()['level'] === '0') {
             notification['info']({
                 message: '请先填写收件人信息',
@@ -231,7 +266,7 @@ class Cart extends Component {
             this.setState({
                 visible: true
             })
-            this.setFieldToOption(record)
+            this.setFieldToOption(option,record)
         } 
     }
   
@@ -267,6 +302,9 @@ class Cart extends Component {
                 title: '商品属性', width: 150, dataIndex: 'attribute', key: 'attribute', align: 'center', render: renderContent
             },
             {
+                title: '商品库存(件)', width: 100, dataIndex: 'stock', key: 'stock', align: 'center', render: renderContent
+            },
+            {
                 title: '商品数量(件)', width: 100, dataIndex: 'buy_num', key: 'buy_num', align: 'center', render: renderContent
             },
             {
@@ -291,9 +329,12 @@ class Cart extends Component {
                 key: 'operation',
                 width: 100,
                 align: 'center',
-                render: ( item ) => {
+                render: ( item, row, index ) => {
                     if (item.name) {
-                        return <span><Button size="small" onClick={ () => { this.showModal(item) }}>删除</Button></span>
+                        return <span>
+                                <Button size="small" onClick={ () => { this.deleteOrder(index) }}>删除</Button>
+                                <Button size="small" onClick={ () => { this.showModal('eidt',item) }}>修改</Button>
+                            </span>
                     } else {
                         return ''
                     }
@@ -349,7 +390,7 @@ class Cart extends Component {
                         isClick = true;
                         buttonName = '售罄'
                     }
-                    return <span><Button size="small" disabled={isClick} onClick={ () => { this.showModal(item) }}>{buttonName}</Button></span>
+                    return <span><Button size="small" disabled={isClick} onClick={ () => { this.showModal('',item) }}>{buttonName}</Button></span>
                 }
               },
         ]
