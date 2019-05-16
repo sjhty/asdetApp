@@ -261,7 +261,7 @@ class List extends Component {
             render: (text) => {
               if (text !== '' && text !== 'null') {
                 let urls = '',urlArr = (text || "").split(',');
-                urlArr.map( (item, index) => {
+                urlArr.map( (item) => {
                   urls += '<img src='+item+' class="table_img" alt='+item+'/>'
                 })
                 return <span dangerouslySetInnerHTML={{__html: urls}}></span>
