@@ -154,6 +154,12 @@ class Cart extends Component {
         this.getProductData();
     }
 
+    submitOrder = (params) => {
+        params.orderProduct = this.state.orderData
+        this.params = params
+        
+    }
+
     addCart = (params) => {
         if (params.buy_num > params.stock) {
             notification['error']({
@@ -397,7 +403,7 @@ class Cart extends Component {
         return (
             <div>
                 <Card title="【购物车】-订单信息">
-                    <BaseForm formList={this.orderInfoList} key={this.orderInfoList} wrappedComponentRef={(form) => this.formRef = form}/>
+                    <BaseForm formList={this.orderInfoList} key={this.orderInfoList} filterSubmit={this.submitOrder}  wrappedComponentRef={(form) => this.formRef = form}/>
                     <Table columns={orderColumns} dataSource={this.state.orderData} scroll={{y: 300 }} style={{marginTop: "20px"}}/>
                 </Card>
                 <Card title="下单商品列表">
