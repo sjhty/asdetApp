@@ -157,6 +157,7 @@ class Cart extends Component {
     submitOrder = (params) => {
         params.orderProduct = this.state.orderData
         this.params = params
+        console.log(params)
         
     }
 
