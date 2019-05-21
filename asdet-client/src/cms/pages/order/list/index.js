@@ -40,6 +40,19 @@ class List extends Component {
             })
     }
 
+    handleFilter = (params) => {
+        if (params.begin_time) {
+          params.begin_time = Moment(params.begin_time).format('YYYY-MM-DD HH:mm:ss');
+        }
+        if (params.end_time) {
+          params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
+        }
+        this.setState({
+          params:params
+        })
+        this.getOrderList();
+    }
+
     orderDetail = (record) => {
         let felidList = this.searchFormList
         let orderDetailList = []
