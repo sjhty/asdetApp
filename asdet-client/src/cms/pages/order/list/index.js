@@ -41,9 +41,9 @@ class List extends Component {
     }
 
     orderDetail = (record) => {
-        console.log('-----------',record)
+        let felidList = this.searchFormList
         let orderDetailList = []
-        this.searchFormList.map( (item) => {
+        felidList.map( (item) => {
             for (const key in record) {
                 if (item.field === key) {
                     item.type = 'SPAN'
