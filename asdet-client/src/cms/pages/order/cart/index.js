@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, Table, Modal, Button, notification } from 'antd'
 import BaseForm from '../../../components/baseForm'
 import ProductsApi from '../../../../axios/api/productsApi'
+import OrdersApi from '../../../../axios/api/ordersApi'
 import Utile from '../../../../utils'
 
 class Cart extends Component {
@@ -106,6 +107,7 @@ class Cart extends Component {
     ]
 
     AddFormList = [
+        {type: 'INPUT',label: '商品编号',field: 'id',placeholder: '请输入商品编号',width: 300,isEdit: true},
         {type: 'SPAN',label: '商品图片',field: 'imgUrl'},
         {type: 'INPUT',label: '商品名称',field: 'name',placeholder: '请输入商品名称',width: 300,isEdit: true},
         {type: 'INPUT',label: '商品规格',field: 'attribute',placeholder: '请输入商品规格',width: 300,isEdit: true},
@@ -132,6 +134,7 @@ class Cart extends Component {
                     size = Utile.formateAttribute(item.size,this.sizeList);
                     let dataObj = {
                         key: index,
+                        id: item.id,
                         imgUrl: item.imgUrl,
                         name: item.name,
                         attribute: '【'+color+'】,'+type+' '+size,
@@ -155,9 +158,29 @@ class Cart extends Component {
     }
 
     submitOrder = (params) => {
-        params.orderProduct = this.state.orderData
+        params.orderData = JSON.stringify(this.state.orderData)
         this.params = params
-        console.log(params)
+
+        OrdersApi.addOrder(this.params)
+            .then( (res) => {
+                if (res.success === true) {
+                    let orderData = JSON.parse(res.data.orderData);
+                    orderData.map( (item) => {
+                        let updateParams = {
+                            id: item.id,
+                            stock: Number(item.stock) - Number(item.buy_num)
+                        }
+                        ProductsApi.updateProduct(updateParams)
+                            .then( (data) => {
+                                console.log('+++++++++++++++',data)
+                            })
+                    })
+                    this.setState({
+                        modelCon: '下单成功，请点击按钮进行下一步操作',
+                        addSuccess: true
+                    })
+                }
+            })
         
     }
 
@@ -169,6 +192,7 @@ class Cart extends Component {
             });
         } else {
             let total = 0;
+            console.log('-----------',params)
             params.totalAmount = Number(params.buy_num) * Number(params.realPrice);
             //params.stock = Number(params.stock) - Number(params.buy_num);
             if (this.orderData.length > 1) {
@@ -289,6 +313,20 @@ class Cart extends Component {
         });
     }
 
+    gotoOrderList = (e) => {
+        this.setState({
+            addSuccess: false
+        });
+        window.location = '#/manage/orders/list'
+    }
+
+    goOnAddOrder = (e) => {
+        this.setState({
+            addSuccess: false
+        });
+        window.location = '#/manage/orders/cart'
+    }
+
     
     render () {
         const renderContent = (value, row, index) => {
@@ -302,6 +340,9 @@ class Cart extends Component {
             return obj;
         };
         const orderColumns = [
+            {
+                title: '商品编号', width: 80, dataIndex: 'id', key: 'id', align: 'center', render: renderContent
+            },
             {
                 title: '商品名称', width: 150, dataIndex: 'name', key: 'name', align: 'center', render: renderContent
             },
@@ -351,6 +392,9 @@ class Cart extends Component {
             
         ]
         const productColumns = [
+            {
+                title: '商品编号', width: 80, dataIndex: 'id', key: 'id', align: 'center',
+            },
             {
                 title: '商品图片', dataIndex: 'imgUrl', key: 'imgUrl', width: 150, align: 'center',
                 render: (text) => {
@@ -413,6 +457,15 @@ class Cart extends Component {
                 </Card>
                 <Modal title="购物车" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} footer={null}>
                     <BaseForm formList={this.requestFormList} key={this.requestFormList} filterSubmit={this.addCart} />
+                </Modal>
+                <Modal
+                    title="提示" centered visible={this.state.addSuccess}
+                    onOk={this.gotoOrderList}
+                    onCancel={this.goOnAddOrder}
+                    okText='前往订单列表'
+                    cancelText='继续下单'
+                    >
+                    <p>{this.state.modelCon}</p>
                 </Modal>
             </div>
         )

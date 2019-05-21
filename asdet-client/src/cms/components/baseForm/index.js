@@ -56,7 +56,7 @@ class BaseForm extends Component {
                 } else if (type === 'SPAN') {
                     const SPAN = <FormItem label={label} key={field}>
                         {
-                            <span className="ant-form-text" dangerouslySetInnerHTML={{__html: initialValue}}></span>
+                            <span className="ant-form-text" dangerouslySetInnerHTML={{__html: initialValue}} style={{width:width}} ></span>
                         }
                     </FormItem>
                     formItemList.push(SPAN);

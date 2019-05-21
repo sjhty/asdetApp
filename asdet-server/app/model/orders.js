@@ -6,7 +6,7 @@ module.exports = app => {
     const Orders = app.model.define('orders', {
         id: {type: INTEGER, primaryKey: true, autoIncrement: true},
         consignee: STRING(20),
-        level: INTEGER,
+        level: STRING(20),
         agent: STRING(20),
         orderData: STRING(9999),
         created_at: DATE

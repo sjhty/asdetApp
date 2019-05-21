@@ -44,7 +44,7 @@ class ProductController extends Controller {
         const newProduct = {
             name: name,
             category_id: category_id,
-            color: color.join(","),
+            color: color ? color.join(",") : color,
             productType: productType,
             size: size,
             imgUrl: imgUrl,

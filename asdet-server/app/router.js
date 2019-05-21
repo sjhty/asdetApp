@@ -18,4 +18,8 @@ module.exports = app => {
 
     //upload
     router.post('/asdet/api/upload', controller.upload.upload);
+
+    //order
+    router.post('/asdet/api/orders/search', controller.orders.findAllList);
+    router.post('/asdet/api/orders/add', controller.orders.addOrder);
 };
