@@ -64,17 +64,26 @@ class List extends Component {
     /**
      * 获取商品列表
      */
-    getProductList = () => { 
-      ProductApi.getCountAndProducts(this.state.params)
+    getProductList = (params) => { 
+      let requestParams = {}
+      if (params) {
+        requestParams = params
+      } else {
+        requestParams = this.state.params
+      }
+      ProductApi.getCountAndProducts(requestParams)
         .then((res) => {
-          res.data.map((item, index) => {
-              item.key = index;
-          })
+          res.data.map((item, index) => 
+              item.key = index
+          )
           this.setState({
             data: res.data
           })
         }).catch((err) => {
-          console.log(err)
+          notification['error']({
+            message: err,
+            description: err,
+          });
         })
     }
 
@@ -92,12 +101,17 @@ class List extends Component {
               name: item.name
             }
             list.push(obj)
+
+            return list
         })
         this.setState({
             categoryList: list
         })
       }).catch((err) => {
-        console.log(err)
+        notification['error']({
+          message: err,
+          description: err,
+        });
       })
     }
 
@@ -115,9 +129,9 @@ class List extends Component {
               if (item.type === 'SPAN') {
                 let urlList = (record[key] || "").split(',')
                 let imgUrl = '';
-                urlList.map( (item, index) => {
+                urlList.map( (item, index) => 
                   imgUrl += '<img src='+ item +' style="width:50px;height:50px;"/>'
-                })
+                )
                 item.initialValue = imgUrl
               } else {
                 item.initialValue = record[key];
@@ -150,6 +164,8 @@ class List extends Component {
             }
             newFieldList.push(item);
           }
+
+          return item
         })
       } else {
         fieldList.map( (item, index) => {
@@ -167,6 +183,8 @@ class List extends Component {
           if (item.field !== 'newStock' && item.type !== 'SPAN' && item.field !== 'id') {
             newFieldList.push(item)
           }
+
+          return item
         })
       }
       this.requestFormList = newFieldList;
@@ -180,18 +198,18 @@ class List extends Component {
         params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
       }
       this.setState({
-        params:params
+        params
       })
-      this.getProductList();
+      this.getProductList(params);
     }
 
     handleFilterUpdate = (params) => {
       params.stock = params.newStock ? Number(params.newStock) + Number(params.stock) : Number(params.stock);
       let url = '';
       if (params.imgUrl) {
-        params.imgUrl.map( (item, index) => {
+        params.imgUrl.map( (item, index) => 
           url += item.response.url + ','
-        })
+        )
         params.imgUrl = url.substring(0,url.length - 1);
       }
 
@@ -222,10 +240,16 @@ class List extends Component {
             })
             this.getProductList();
           } else {
-            alert('修改失败');
+            notification['error']({
+              message: '修改失败',
+              description: '修改失败',
+            });
           }
         }).catch( (err) => {
-          console.log(err);
+          notification['error']({
+            message: err,
+            description: err,
+          });
         })
     }
 
@@ -261,9 +285,9 @@ class List extends Component {
             render: (text) => {
               if (text !== '' && text !== 'null') {
                 let urls = '',urlArr = (text || "").split(',');
-                urlArr.map( (item) => {
+                urlArr.map( (item) => 
                   urls += '<img src='+item+' class="table_img" alt='+item+'/>'
-                })
+                )
                 return <span dangerouslySetInnerHTML={{__html: urls}}></span>
               } else {
                 return ''

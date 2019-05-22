@@ -25,13 +25,13 @@ const request = function(url, params, method) {
     return new Promise((resolve, reject) => {
         axios[method](url, qs.stringify(params))
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 resolve(response.data)
             }, err => {
-                console.log("reject【"+err+"】")
+                //console.log("reject【"+err+"】")
                 reject(err)
             }).catch(err => {
-                console.log("err【"+err+"】")
+                //console.log("err【"+err+"】")
                 reject(err)
             })
     })

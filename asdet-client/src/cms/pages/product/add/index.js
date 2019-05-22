@@ -22,6 +22,8 @@ class AddProductForm extends Component {
                         id: item.id,
                         name: item.name
                     })
+
+                    return item
                 })
                 this.setState({
                     list

@@ -145,6 +145,7 @@ class Cart extends Component {
                         president_price: item.category.president_price
                     }
                     list.push(dataObj)
+                    return list
                 });
                 this.setState({
                     productData: list
@@ -158,6 +159,13 @@ class Cart extends Component {
     }
 
     submitOrder = (params) => {
+        if (!params.orderData) {
+            notification['error']({
+                message: '请选择商品',
+                description: '请选择商品',
+            });
+            return;
+        }
         params.orderData = JSON.stringify(this.state.orderData)
         this.params = params
 
@@ -172,8 +180,10 @@ class Cart extends Component {
                         }
                         ProductsApi.updateProduct(updateParams)
                             .then( (data) => {
-                                console.log('+++++++++++++++',data)
+                                return data
                             })
+
+                        return item
                     })
                     this.setState({
                         modelCon: '下单成功，请点击按钮进行下一步操作',
@@ -199,9 +209,9 @@ class Cart extends Component {
                 this.orderData.splice(this.orderData.length - 1, 1);
             }
             this.orderData.push(params)
-            this.orderData.map( (item) => {
+            this.orderData.map( (item) => 
                 total += Number(item.totalAmount)
-            })
+            )
 
             this.orderData.push({
                 totalAmount: '总计：' + total
@@ -218,16 +228,15 @@ class Cart extends Component {
     }
 
     deleteOrder = (index) => {
-        debugger
         let total = 0;
         this.orderData.splice(index,1);
         if (this.orderData.length <= 1) {
             this.orderData = []
         } else {
             this.orderData.splice(this.orderData.length - 1, 1);
-            this.orderData.map( (item) => {
+            this.orderData.map( (item) => 
                 total += Number(item.totalAmount)
-            })
+            )
     
             this.orderData.push({
                 totalAmount: '总计：' + total
@@ -240,7 +249,6 @@ class Cart extends Component {
     }
 
     setFieldToOption = (option,record) => {
-        //debugger
         let fieldList = this.AddFormList;
         let level = this.formRef.getItemsValue()['level'];
         let newFieldList = [];
@@ -280,10 +288,11 @@ class Cart extends Component {
                 }
             }
             
-            
+            return item
           })
         }
         this.requestFormList = newFieldList;
+        return newFieldList
       }
 
     //显示modal表单弹框
@@ -400,9 +409,9 @@ class Cart extends Component {
                 render: (text) => {
                   if (text !== '' && text !== 'null') {
                     let urls = '',urlArr = (text || "").split(',');
-                    urlArr.map( (item, index) => {
+                    urlArr.map( (item, index) => 
                       urls += '<img src='+item+' class="table_img" alt='+item+'/>'
-                    })
+                    )
                     return <span dangerouslySetInnerHTML={{__html: urls}}></span>
                   } else {
                     return ''

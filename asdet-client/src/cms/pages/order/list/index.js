@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Moment from 'moment'
 import OrdersApi from '../../../../axios/api/ordersApi'
-import { Card, Table, Modal, Button, notification } from 'antd'
+import { Card, Table, Modal, Button } from 'antd'
 import Utils from '../../../../utils'
 import BaseForm from '../../../components/baseForm'
 
@@ -25,14 +25,31 @@ class List extends Component {
         {type: 'BUTTON',label: '查询'}
     ]
 
+    orderFormList = [
+        {type: 'INPUT',label: '收件人',field: 'consignee',placeholder: '请输入收件人',width: 180},
+        {type: 'SELECT',label: '收货人级别',field: 'level',placeholder: '全部',initialValue: '0',width: 180,list: this.levelList},
+        {type: 'INPUT',label: '代理商姓名',field: 'agent',placeholder: '请输入代理商姓名',width: 180},
+        {type: 'TIME_SELECT'},
+        {type: 'BUTTON',label: '查询'}
+    ]
+
     componentWillMount() {
         this.getOrderList()
     }
 
-    getOrderList = () => {
-        OrdersApi.getAllList(this.state.params)
+    getOrderList = (params) => {
+        let requestParams = {}
+        if (params) {
+            requestParams = params
+        } else {
+            requestParams = this.state.params
+        }
+        OrdersApi.getAllList(requestParams)
             .then( (res) => {
                 if (res.success === true) {
+                    res.data.map( (item, index) => 
+                        item.key = index
+                    )
                     this.setState({
                         orderData: res.data
                     })
@@ -48,13 +65,13 @@ class List extends Component {
           params.end_time = Moment(params.end_time).format('YYYY-MM-DD HH:mm:ss');
         }
         this.setState({
-          params:params
+          params
         })
-        this.getOrderList();
+        this.getOrderList(params);
     }
 
     orderDetail = (record) => {
-        let felidList = this.searchFormList
+        let felidList = this.orderFormList
         let orderDetailList = []
         felidList.map( (item) => {
             for (const key in record) {
@@ -69,12 +86,13 @@ class List extends Component {
                     orderDetailList.push(item)
                 }
             }
-            
+            return orderDetailList
         })
+
         this.setState({
             visible: true,
             orderDetailList,
-            productData: JSON.parse(record.orderData)
+            productData: Utils.addKeyToData(JSON.parse(record.orderData))
         })
     }
 

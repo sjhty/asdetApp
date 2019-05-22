@@ -10,9 +10,9 @@ export default {
     getOptionList(data) {
         if (data) {
             const Options = [<Option value='0' key='0'>请选择</Option>];
-            data.map((item) => {
+            data.map((item) => 
                 Options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
-            })
+            )
             return Options;
         } else {
             return []
@@ -54,22 +54,31 @@ export default {
     formateAttribute(value,arr) {
         let result = '';
         if (value instanceof Array) {
-            value.map( (item) => {
+            value.map( (item) => 
                 arr.map( (option) => {
                     if (item === option.id) {
                         result += option.name + ',';
                     }
+                    return result
                 })
-            })
+            )
         } else {
             arr.map( (option) => {
-
                 if (value === option.id) {
                     result = option.name;
                 }
+                return result
             })
         }
 
         return result;
+    },
+
+    addKeyToData(data) {
+        data.map( (item, index) => 
+            item.key = index
+        )
+
+        return data
     }
 }

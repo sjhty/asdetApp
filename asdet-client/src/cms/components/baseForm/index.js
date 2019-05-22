@@ -7,7 +7,6 @@ class BaseForm extends Component {
 
     handleFilterSubmit = () => {
         let fieldsValue = this.props.form.getFieldsValue();
-        console.log(fieldsValue)
         this.props.filterSubmit(fieldsValue);
     }
 
@@ -17,7 +16,6 @@ class BaseForm extends Component {
     }
 
     normFile = (e) => {
-        //console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -40,7 +38,6 @@ class BaseForm extends Component {
                 let disabled = item.isEdit;
                 let btnClass = item.className;
                 let resetBtnShow = item.resetBtn;
-                let defaultValue = item.defaultValue;
 
                 if (type === 'INPUT') {
                     const INPUT = <FormItem label={label} key={field}>
