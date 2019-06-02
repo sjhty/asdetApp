@@ -159,7 +159,8 @@ class Cart extends Component {
     }
 
     submitOrder = (params) => {
-        if (!params.orderData) {
+        console.log('--------------',params)
+        if (!this.state.orderData) {
             notification['error']({
                 message: '请选择商品',
                 description: '请选择商品',

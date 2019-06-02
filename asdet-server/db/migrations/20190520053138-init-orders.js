@@ -18,7 +18,7 @@ module.exports = {
       level: STRING(20),
       agent: STRING(20),
       orderData: STRING(9999),
-      created_at: DATE
+      create_at: DATE
    });
   },
 

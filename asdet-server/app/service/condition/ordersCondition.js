@@ -23,17 +23,17 @@ module.exports = {
             }
         } 
         if (begin_time !== null && end_time !== null) {
-            whereObj['created_at'] = {
+            whereObj['create_at'] = {
                 [Op.between]: [begin_time, end_time]
             }
         } 
         if (begin_time !== null && end_time === null) {
-            whereObj['created_at'] = {
+            whereObj['create_at'] = {
                 [Op.gte]: begin_time
             }
         } 
         if (begin_time === null && end_time !== null) {
-            whereObj['created_at'] = {
+            whereObj['create_at'] = {
                 [Op.lte]: end_time
             }
         }

@@ -9,7 +9,7 @@ module.exports = app => {
         level: STRING(20),
         agent: STRING(20),
         orderData: STRING(9999),
-        created_at: DATE
+        create_at: DATE
     },{
         timestamps: false,  //去除createAt updateAt
         freezeTableName: true,  //使用自定义表名

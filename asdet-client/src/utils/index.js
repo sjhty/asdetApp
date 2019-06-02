@@ -52,6 +52,7 @@ export default {
      * 渲染表格数据处理
      */
     formateAttribute(value,arr) {
+        //debugger
         let result = '';
         if (value instanceof Array) {
             value.map( (item) => 
