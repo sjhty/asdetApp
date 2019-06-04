@@ -21,7 +21,7 @@ module.exports = appInfo => {
   config.middleware = ['errorHandler'];
 
   //add db config
-  config.sequelize = asdet_db;
+  config.sequelize = asdet_db.test;
 
   //跨域白名单设置
   config.security = {
