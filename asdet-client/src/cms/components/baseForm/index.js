@@ -100,13 +100,19 @@ class BaseForm extends Component {
                     </FormItem>
                     formItemList.push(BUTTON);
                 } else if (type === 'UPLOAD') {
+                    let env = process.env.NODE_ENV,uploadUrl=''; 
+                    if (env === 'development') {
+                        uploadUrl = 'http://127.0.0.1:7001/asdet/api/upload';
+                    } else {
+                        uploadUrl = 'http://49.234.12.142:7001/asdet/api/upload';
+                    }
                     const UPLOAD = <FormItem key={field} label={label}>
                         {
                             getFieldDecorator(field, {
                                 valuePropName: 'fileList',
                                 getValueFromEvent: this.normFile
                             })(
-                                <Upload name="logo" action="http://127.0.0.1:7001/asdet/api/upload" listType="picture" disabled={disabled}> 
+                                <Upload name="logo" action={uploadUrl} listType="picture" disabled={disabled}> 
                                     <Button>
                                         <Icon type="upload" /> 点击上传
                                     </Button>

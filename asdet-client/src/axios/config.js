@@ -1,7 +1,13 @@
 import axios from 'axios';
 import qs from 'qs'
 
-axios.defaults.baseURL = 'http://127.0.0.1:7001/asdet/api';
+let env = process.env.NODE_ENV;
+if (env === 'development') {
+    axios.defaults.baseURL = 'http://127.0.0.1:7001/asdet/api';
+} else {
+    axios.defaults.baseURL = 'http://49.234.12.142:7001/asdet/api';
+}
+
 axios.defaults.responseType = 'json';
 axios.defaults.headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'}
 

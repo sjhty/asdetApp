@@ -332,9 +332,9 @@ class Cart extends Component {
 
     goOnAddOrder = (e) => {
         this.setState({
-            addSuccess: false
+            addSuccess: false,
         });
-        window.location = '#/manage/orders/cart'
+        window.location.reload();
     }
 
     

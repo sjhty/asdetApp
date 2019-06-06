@@ -48,8 +48,8 @@ class List extends Component {
       {type: 'SELECT',label: '商品颜色',field: 'color',mode:'tags',placeholder: '请选择颜色',initialValue: '0',width: 300,list: this.state.colorList},
       {type: 'UPLOAD',label: '上传图片',field: 'imgUrl'},
       {type: 'SPAN',label: '商品图片',field: 'imgUrl'},
-      {type: 'INPUT',label: '现有库存数量',field: 'newStock',placeholder: '请输入现有库存数量',width: 300},
-      {type: 'INPUT',label: '入库数量',field: 'stock',placeholder: '请输入入库数量',width: 300},
+      {type: 'INPUT',label: '现有库存数量',field: 'stock',placeholder: '请输入现有库存数量',width: 300},
+      {type: 'INPUT',label: '入库数量',field: 'newStock',placeholder: '请输入入库数量',width: 300},
       {type: 'BUTTON',label: '添加入库',className: 'modal_form_btn'}
     ]
     searchFormList = [
@@ -146,13 +146,20 @@ class List extends Component {
                 }
                 
               } else if (option === 'edit_stock' && item.type !== 'UPLOAD') {
-                if (item.field !== 'stock') {
+                if (item.field === 'stock') {
                   item.isEdit = true;
                 }
-                newFieldList.push(item);
+
+                newFieldList.push(item); 
               }
             }
             
+          }
+
+          if (option === 'edit_stock' && item.type !== 'UPLOAD') {
+            if (item.field === 'newStock') {
+              newFieldList.push(item); 
+            }
           }
 
           if ( item.type === 'BUTTON' ) {
@@ -180,7 +187,7 @@ class List extends Component {
           if (item.field === 'category_id') {
             item.list = this.state.categoryList
           }
-          if (item.field !== 'newStock' && item.type !== 'SPAN' && item.field !== 'id') {
+          if (item.field !== 'stock' && item.type !== 'SPAN' && item.field !== 'id') {
             newFieldList.push(item)
           }
 
@@ -204,7 +211,8 @@ class List extends Component {
     }
 
     handleFilterUpdate = (params) => {
-      params.stock = params.newStock ? Number(params.newStock) + Number(params.stock) : Number(params.stock);
+      console.log(params)
+      params.stock = params.stock ? Number(params.newStock) + Number(params.stock) : Number(params.newStock);
       let url = '';
       if (params.imgUrl) {
         params.imgUrl.map( (item, index) => 
