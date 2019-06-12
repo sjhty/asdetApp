@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Row, Col, Breadcrumb } from 'antd'
 import Utils from '../../../utils'
 import LoginImg from '../../assets/images/login_img.jpg'
@@ -16,6 +17,7 @@ class Header extends Component {
     }
 
     render () {
+        const { menuName, menuType } = this.props;
         return (
             <Row className="main_header">
                 <Col className="header_con">
@@ -29,7 +31,7 @@ class Header extends Component {
                     <Row className="heaser_down">
                         <Col span={19} className="breadCrumb">
                             <Breadcrumb separator=">" className="bread_nav">
-                                <Breadcrumb.Item>首页</Breadcrumb.Item>
+                                <Breadcrumb.Item>{ menuName || '首页'}</Breadcrumb.Item>
                             </Breadcrumb>
                             <label></label>
                         </Col>
@@ -48,4 +50,10 @@ class Header extends Component {
     }
 }
 
-export default Header
+const mapStateToProps = state => {
+    return {
+        menuName: state.switchMenu.menuName
+    }
+};
+
+export default connect(mapStateToProps)(Header)
