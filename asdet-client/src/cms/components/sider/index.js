@@ -3,7 +3,7 @@ import { Row, Col, Menu, Icon } from 'antd'
 import MenuConfig from './menuConfig'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { switchMenu } from '../../store/home/action'
+import { switchMenu } from '../../../store/home/action'
 import './index.less'
 
 const SubMenu = Menu.SubMenu
