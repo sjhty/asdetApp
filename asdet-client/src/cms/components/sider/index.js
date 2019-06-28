@@ -66,7 +66,7 @@ class Sider extends Component {
 
     render () {
         return (
-            <Col span={4} style={{position: "fixed"}}>
+            <Col span={4} className="nav_sider" style={{position: "fixed"}}>
                 <Row className="asdet_logo">
                     <Col>
                         <span className="logo chin_logo">雅茜•优艾</span>
